@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <button type="submit" class="btn btn-creative w-100">
+                            <button type="submit" class="btn btn-creative w-100" style="padding: 0.375rem 0.75rem; height: calc(1.5em + 0.75rem + 2px);">
                                 <i class="bi bi-search me-2"></i>Найти
                             </button>
                         </div>
@@ -72,15 +72,21 @@
                                     {{ $advert->title }}
                                 </h5>
                                 <div>
-                                    @if($advert->is_approved)
-                                        <span class="badge bg-success" style="font-size: 0.75rem; padding: 4px 8px;">
-                                            <i class="bi bi-check-circle me-1"></i>Одобрено
-                                        </span>
-                                    @else
-                                        <span class="badge bg-warning text-dark" style="font-size: 0.75rem; padding: 4px 8px;">
-                                            <i class="bi bi-clock-history me-1"></i>Ожидает одобрения
-                                        </span>
-                                    @endif
+                                    @php
+                                        [$label, $color] = $advert->statusLabel();
+                                    @endphp
+                                    <span class="badge bg-{{ $color }}" style="font-size: 0.75rem; padding: 4px 8px;">
+                                        @if($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_APPROVED)
+                                            <i class="bi bi-check-circle me-1"></i>
+                                        @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REJECTED)
+                                            <i class="bi bi-x-circle me-1"></i>
+                                        @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REVISION)
+                                            <i class="bi bi-arrow-repeat me-1"></i>
+                                        @else
+                                            <i class="bi bi-clock-history me-1"></i>
+                                        @endif
+                                        {{ $label }}
+                                    </span>
                                 </div>
                             </div>
                             <div class="dropdown">
@@ -88,19 +94,23 @@
                                     <i class="bi bi-three-dots-vertical"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    @if($advert->is_approved)
-                                        <li class="px-3 py-2">
-                                            <small class="text-success">
-                                                <i class="bi bi-check-circle me-1"></i>Одобрено
-                                            </small>
-                                        </li>
-                                    @else
-                                        <li class="px-3 py-2">
-                                            <small class="text-warning">
-                                                <i class="bi bi-clock-history me-1"></i>Ожидает
-                                            </small>
-                                        </li>
-                                    @endif
+                                    @php
+                                        [$label, $color] = $advert->statusLabel();
+                                    @endphp
+                                    <li class="px-3 py-2">
+                                        <small class="text-{{ $color }}">
+                                            @if($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_APPROVED)
+                                                <i class="bi bi-check-circle me-1"></i>
+                                            @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REJECTED)
+                                                <i class="bi bi-x-circle me-1"></i>
+                                            @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REVISION)
+                                                <i class="bi bi-arrow-repeat me-1"></i>
+                                            @else
+                                                <i class="bi bi-clock-history me-1"></i>
+                                            @endif
+                                            {{ $label }}
+                                        </small>
+                                    </li>
                                     @can('edit ads')
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
@@ -117,7 +127,7 @@
                                         </li>
                                     @endcan
                                     @role('admin')
-                                        @if(!$advert->is_approved)
+                                        @if($advert->moderation_status !== \App\Models\Advert::MOD_ADVERT_APPROVED)
                                             <li><hr class="dropdown-divider"></li>
                                             <li>
                                                 <form action="{{ route('adverts.approve', $advert) }}" method="POST" style="display:inline;">

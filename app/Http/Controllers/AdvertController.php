@@ -18,12 +18,12 @@ class AdvertController extends Controller
         } elseif ($user) {
             // user — approved + свои
             $query->where(function ($q) use ($user) {
-                $q->where('is_approved', true)
+                $q->where('moderation_status', Advert::MOD_ADVERT_APPROVED)
                     ->orWhere('user_id', $user->id);
             });
         } else {
             // guest — только approved
-            $query->where('is_approved', true);
+            $query->where('moderation_status', Advert::MOD_ADVERT_APPROVED);
         }
 
         // Поиск

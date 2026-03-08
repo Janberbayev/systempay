@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn btn-creative w-100">
+                                <button type="submit" class="btn btn-creative w-100" style="padding: 0.375rem 0.75rem; height: calc(1.5em + 0.75rem + 2px);">
                                     <i class="bi bi-search me-2"></i>Найти
                                 </button>
                             </div>
