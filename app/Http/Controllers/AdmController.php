@@ -263,12 +263,128 @@ class AdmController extends Controller
         return view('admin.regions.index', compact('regions'));
     }
 
+    public function cities()
+    {
+        $cities = City::with('region')->orderBy('name')->get();
+        $regions = Region::orderBy('name')->get();
+        return view('admin.cities.index', compact('cities', 'regions'));
+    }
+
+    public function storeCity(Request $request)
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Access denied.');
+        }
+
+        // Валидация
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'region_id' => 'required|exists:regions,id',
+        ]);
+
+        City::create([
+            'name' => $request->name,
+            'region_id' => $request->region_id,
+        ]);
+
+        return back()->with('success', 'Город добавлен');
+    }
+
+    public function editCity(City $city, Request $request)
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Access denied.');
+        }
+
+        // Валидация для обновления
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'region_id' => 'required|exists:regions,id',
+        ]);
+
+        $city->update([
+            'name' => $request->name,
+            'region_id' => $request->region_id,
+        ]);
+
+        return back()->with('success', 'Город обновлен');
+    }
+
+    public function destroyCity(City $city)
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Access denied.');
+        }
+
+        $cityName = $city->name;
+        $city->delete();
+
+        return back()->with('success', "Город \"{$cityName}\" удален");
+    }
+
+    public function storeRegion(Request $request)
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Access denied.');
+        }
+
+        // Валидация
+        $request->validate([
+            'name' => 'required|string|max:255|unique:regions,name',
+        ]);
+
+        Region::create([
+            'name' => $request->name,
+        ]);
+
+        return back()->with('success', 'Регион добавлен');
+    }
+
+    public function getRegion(Region $region)
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Доступ запрещен'
+            ], 403);
+        }
+
+        return response()->json([
+            'success' => true,
+            'region' => [
+                'id' => $region->id,
+                'name' => $region->name,
+            ]
+        ]);
+    }
+
     public function editRegion(Region $region, Request $request)
     {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Access denied.');
+        }
+
+        // Валидация для обновления
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
         $region->update([
             'name' => $request->name,
         ]);
 
         return back()->with('success', 'Регион обновлен');
+    }
+
+    public function destroyRegion(Region $region)
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Access denied.');
+        }
+
+        $regionName = $region->name;
+        $region->delete();
+
+        return back()->with('success', "Регион \"{$regionName}\" удален");
     }
 }

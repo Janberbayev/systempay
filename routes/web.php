@@ -65,9 +65,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/admin/projects/{project}/revision', [AdmController::class, 'revisionProject'])->name('projects.revision')->middleware('role:admin');
 
     Route::get('/admin/regions', [AdmController::class, 'regions'])->name('admin-regions')->middleware('role:admin');
-    Route::get('/admin/{region}', [AdmController::class, 'editRegion'])->name('admin-regions-edit')->middleware('role:admin');
+    Route::post('/admin/regions', [AdmController::class, 'storeRegion'])->name('admin.regions.store')->middleware('role:admin');
+    Route::get('/admin/regions/{region}', [AdmController::class, 'getRegion'])->name('admin.regions.get')->middleware('role:admin');
+    Route::patch('/admin/regions/{region}', [AdmController::class, 'editRegion'])->name('admin.regions.update')->middleware('role:admin');
+    Route::delete('/admin/regions/{region}', [AdmController::class, 'destroyRegion'])->name('admin.regions.destroy')->middleware('role:admin');
 
     Route::get('/admin/cities', [AdmController::class, 'cities'])->name('admin-cities')->middleware('role:admin');
+    Route::post('/admin/cities', [AdmController::class, 'storeCity'])->name('admin.cities.store')->middleware('role:admin');
+    Route::patch('/admin/cities/{city}', [AdmController::class, 'editCity'])->name('admin.cities.update')->middleware('role:admin');
+    Route::delete('/admin/cities/{city}', [AdmController::class, 'destroyCity'])->name('admin.cities.destroy')->middleware('role:admin');
+
+    Route::get('/admin/{region}', [AdmController::class, 'editRegion'])->name('admin-regions-edit')->middleware('role:admin');
+
     // для user
     Route::get('/dashboard/publish', function () {return view('dashboard'); })->name('publish');
     Route::get('list-project', [ProjectController::class, 'index'])->name('list-project')->middleware('can:view projects');

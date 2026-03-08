@@ -19,21 +19,13 @@
                         Создавайте проекты, находите таланты и проводите безопасные сделки
                         с гарантией оплаты через эскroу-счёт. Всё просто и прозрачно!
                     </p>
-                    <div class="d-flex flex-wrap gap-3 mb-3">
+                    <div class="d-flex flex-wrap gap-3 mb-5">
                         <button class="btn btn-creative btn-lg">
                             <i class="bi bi-briefcase me-2"></i>Я заказчик
                         </button>
                         <button class="btn btn-creative-secondary btn-lg">
                             <i class="bi bi-person-check me-2"></i>Я исполнитель
                         </button>
-                    </div>
-                    <div class="d-flex flex-wrap gap-2 mb-5">
-                        <a href="{{ route('login') }}" class="btn btn-creative-accent btn-sm fw-bold" style="border-radius: 999px;">
-                            Войти
-                        </a>
-                        <a href="{{ route('register') }}" class="btn btn-creative btn-sm fw-bold" style="border-radius: 999px;">
-                            Регистрация
-                        </a>
                     </div>
                     <div class="row g-4">
                         <div class="col-4">

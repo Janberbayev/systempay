@@ -1,0 +1,13 @@
+CREATE DATABASE systempay_db;
+CREATE USER 'systempay_user'@'localhost' IDENTIFIED BY 'bd331759';
+GRANT ALL PRIVILEGES ON systempay_db.* TO 'systempay_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=systempay_db
+DB_USERNAME=systempay_user
+DB_PASSWORD=ваш_пароль

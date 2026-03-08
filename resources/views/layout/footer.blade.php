@@ -17,7 +17,8 @@
             </div>
             <div class="col-md-4">
                 <h6 class="mb-3 fw-semibold" style="color: #f3f4f6;">Контакты</h6>
-                <p class="small mb-2" style="color: #9ca3af;">support@systempay.com</p>
+                <p class="small mb-2" style="color: #9ca3af;">Тел.: +7702 1105742</p>
+                <p class="small mb-2" style="color: #9ca3af;">Почта: support@systempay.com</p>
                 <p class="small mb-0" style="color: #6b7280;">© 2026 SystemPay. Все права защищены.</p>
             </div>
         </div>

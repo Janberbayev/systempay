@@ -24,24 +24,24 @@
 
         @include('components.admin-nav')
 
-        <!-- Regions Content -->
+        <!-- Cities Content -->
             <div class="card-creative p-4">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h2 class="fw-black mb-0">
-                        <i class="bi bi-person-check me-2" style="color: var(--primary);"></i>
-                        Управление регионами
+                        <i class="bi bi-geo-alt me-2" style="color: var(--primary);"></i>
+                        Управление городами
                     </h2>
                     <button 
                         type="button"
                         class="btn btn-creative-secondary"
                         data-bs-toggle="modal"
-                        data-bs-target="#addRegionModal"
+                        data-bs-target="#addCityModal"
                     >
-                        <i class="bi bi-plus-circle me-2"></i>Добавить Регион
+                        <i class="bi bi-plus-circle me-2"></i>Добавить Город
                     </button>
                 </div>
                 <p class="text-muted mb-4">
-                    Просмотр и управление регионами.
+                    Просмотр и управление городами.
                 </p>
                 <div class="table-responsive">
                     <table class="table table-hover">
@@ -49,23 +49,26 @@
                         <tr>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color);">ID</th>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color);">Регион</th>
+                            <th class="fw-bold" style="border-bottom: 1px solid var(--border-color);">Город</th>
                             <th class="fw-bold text-center" style="border-bottom: 1px solid var(--border-color);">Действия</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach($regions as $region)
+                        @foreach($cities as $city)
                             <tr>
-                                <td>{{ $region->id }}</td>
-                                <td>{{ $region->name }}</td>
+                                <td>{{ $city->id }}</td>
+                                <td>{{ $city->region->name ?? '—' }}</td>
+                                <td>{{ $city->name }}</td>
                                 <td class="text-center">
                                     <div class="d-flex gap-2 justify-content-center">
                                         <button
                                             type="button"
                                             class="btn btn-sm btn-action-edit"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#editRegionModal"
-                                            data-region-id="{{ $region->id }}"
-                                            data-region-name="{{ $region->name }}"
+                                            data-bs-target="#editCityModal"
+                                            data-city-id="{{ $city->id }}"
+                                            data-city-name="{{ $city->name }}"
+                                            data-city-region-id="{{ $city->region_id }}"
                                         >
                                             <i class="bi bi-pencil me-1"></i>Редактировать
                                         </button>
@@ -73,9 +76,9 @@
                                             type="button"
                                             class="btn btn-sm btn-action-delete"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#deleteRegionModal"
-                                            data-region-id="{{ $region->id }}"
-                                            data-region-name="{{ $region->name }}"
+                                            data-bs-target="#deleteCityModal"
+                                            data-city-id="{{ $city->id }}"
+                                            data-city-name="{{ $city->name }}"
                                         >
                                             <i class="bi bi-trash me-1"></i>Удалить
                                         </button>
@@ -148,38 +151,59 @@
         }
     </style>
 
-    <!-- Add Region Modal -->
-    <div class="modal fade" id="addRegionModal" tabindex="-1" aria-labelledby="addRegionModalLabel" aria-hidden="true">
+    <!-- Add City Modal -->
+    <div class="modal fade" id="addCityModal" tabindex="-1" aria-labelledby="addCityModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content card-creative" style="border: none;">
                 <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
                     <div class="icon-creative primary me-3" style="width: 60px; height: 60px; font-size: 2rem; background: rgba(4, 120, 87, 0.1); border-color: #047857;">
                         <i class="bi bi-plus-circle" style="color: #047857;"></i>
                     </div>
-                    <h5 class="modal-title fw-black" id="addRegionModalLabel">
-                        Добавить регион
+                    <h5 class="modal-title fw-black" id="addCityModalLabel">
+                        Добавить город
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="addRegionForm" method="POST" action="{{ route('admin.regions.store') }}">
+                <form id="addCityForm" method="POST" action="{{ route('admin.cities.store') }}">
                     @csrf
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label for="addRegionName" class="form-label fw-bold">
+                            <label for="addCityName" class="form-label fw-bold">
                                 <i class="bi bi-geo-alt me-2" style="color: var(--primary);"></i>
-                                Название региона
+                                Название города
                             </label>
                             <input
                                 type="text"
                                 class="form-control"
-                                id="addRegionName"
+                                id="addCityName"
                                 name="name"
                                 required
                                 style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px;"
-                                placeholder="Введите название региона"
+                                placeholder="Введите название города"
                                 value="{{ old('name') }}"
                             >
                             @error('name')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="addCityRegion" class="form-label fw-bold">
+                                <i class="bi bi-map me-2" style="color: var(--primary);"></i>
+                                Регион
+                            </label>
+                            <select
+                                class="form-control"
+                                id="addCityRegion"
+                                name="region_id"
+                                required
+                                style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px;"
+                            >
+                                <option value="">Выберите регион</option>
+                                @foreach($regions as $region)
+                                    <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('region_id')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
@@ -197,38 +221,93 @@
         </div>
     </div>
 
-    <!-- Edit Region Modal -->
-    <div class="modal fade" id="editRegionModal" tabindex="-1" aria-labelledby="editRegionModalLabel" aria-hidden="true">
+    <!-- Delete City Confirmation Modal -->
+    <div class="modal fade" id="deleteCityModal" tabindex="-1" aria-labelledby="deleteCityModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card-creative" style="border: none;">
+                <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+                    <div class="icon-creative primary me-3" style="width: 60px; height: 60px; font-size: 2rem; background: rgba(220, 53, 69, 0.1); border-color: #dc3545;">
+                        <i class="bi bi-exclamation-triangle" style="color: #dc3545;"></i>
+                    </div>
+                    <h5 class="modal-title fw-black" id="deleteCityModalLabel">
+                        Подтверждение удаления города
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="deleteCityForm" method="POST" action="">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body p-4">
+                        <p class="lead mb-0">
+                            Вы уверены, что хотите удалить город "<strong id="cityNameToDelete"></strong>"?
+                        </p>
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-width: 1px; border-radius: 12px; font-weight: 600; padding: 12px 24px;">
+                            <i class="bi bi-x-circle me-2"></i>Отмена
+                        </button>
+                        <button type="submit" class="btn btn-outline-danger" style="border-width: 1px; border-radius: 12px; font-weight: 600; padding: 12px 24px;">
+                            <i class="bi bi-trash me-2"></i>Да, удалить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit City Modal -->
+    <div class="modal fade" id="editCityModal" tabindex="-1" aria-labelledby="editCityModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content card-creative" style="border: none;">
                 <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
                     <div class="icon-creative primary me-3" style="width: 60px; height: 60px; font-size: 2rem; background: rgba(4, 120, 87, 0.1); border-color: #047857;">
                         <i class="bi bi-pencil-square" style="color: #047857;"></i>
                     </div>
-                    <h5 class="modal-title fw-black" id="editRegionModalLabel">
-                        Редактировать регион
+                    <h5 class="modal-title fw-black" id="editCityModalLabel">
+                        Редактировать город
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="editRegionForm" method="POST" action="">
+                <form id="editCityForm" method="POST" action="">
                     @csrf
                     @method('PATCH')
                     <div class="modal-body p-4">
                         <div class="mb-3">
-                            <label for="editRegionName" class="form-label fw-bold">
+                            <label for="editCityName" class="form-label fw-bold">
                                 <i class="bi bi-geo-alt me-2" style="color: var(--primary);"></i>
-                                Название региона
+                                Название города
                             </label>
                             <input
                                 type="text"
                                 class="form-control"
-                                id="editRegionName"
+                                id="editCityName"
                                 name="name"
                                 required
                                 style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px;"
-                                placeholder="Введите название региона"
+                                placeholder="Введите название города"
                             >
                             @error('name')
+                                <div class="text-danger mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCityRegion" class="form-label fw-bold">
+                                <i class="bi bi-map me-2" style="color: var(--primary);"></i>
+                                Регион
+                            </label>
+                            <select
+                                class="form-control"
+                                id="editCityRegion"
+                                name="region_id"
+                                required
+                                style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px;"
+                            >
+                                <option value="">Выберите регион</option>
+                                @foreach($regions as $region)
+                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('region_id')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
                         </div>
@@ -246,163 +325,70 @@
         </div>
     </div>
 
-    <!-- Delete Region Confirmation Modal -->
-    <div class="modal fade" id="deleteRegionModal" tabindex="-1" aria-labelledby="deleteRegionModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content card-creative" style="border: none;">
-                <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
-                    <div class="icon-creative primary me-3" style="width: 60px; height: 60px; font-size: 2rem; background: rgba(220, 53, 69, 0.1); border-color: #dc3545;">
-                        <i class="bi bi-exclamation-triangle" style="color: #dc3545;"></i>
-                    </div>
-                    <h5 class="modal-title fw-black" id="deleteRegionModalLabel">
-                        Подтверждение удаления региона
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="deleteRegionForm" method="POST" action="">
-                    @csrf
-                    @method('DELETE')
-                    <div class="modal-body p-4">
-                        <p class="lead mb-0">
-                            Вы уверены, что хотите удалить регион "<strong id="regionNameToDelete"></strong>"?
-                        </p>
-                    </div>
-                    <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-width: 1px; border-radius: 12px; font-weight: 600; padding: 12px 24px;">
-                            <i class="bi bi-x-circle me-2"></i>Отмена
-                        </button>
-                        <button type="submit" class="btn btn-outline-danger" style="border-width: 1px; border-radius: 12px; font-weight: 600; padding: 12px 24px;">
-                            <i class="bi bi-trash me-2"></i>Да, удалить
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Delete User Confirmation Modal -->
-    <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content card-creative" style="border: none;">
-                <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
-                    <div class="icon-creative primary me-3" style="width: 60px; height: 60px; font-size: 2rem; background: rgba(220, 53, 69, 0.1); border-color: #dc3545;">
-                        <i class="bi bi-exclamation-triangle" style="color: #dc3545;"></i>
-                    </div>
-                    <h5 class="modal-title fw-black" id="deleteUserModalLabel">
-                        Подтверждение удаления пользователя
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body p-4">
-                    <p class="lead mb-3">
-                        Вы уверены, что хотите удалить пользователя <strong id="userNameToDelete"></strong>?
-                    </p>
-                    <div class="card-creative p-3 mb-3" style="background: rgba(107, 114, 128, 0.08); border: 1px solid rgba(107, 114, 128, 0.25);">
-                        <p class="mb-1"><strong>Email:</strong> <span id="userEmailToDelete"></span></p>
-                    </div>
-                    <div class="alert alert-warning mb-0" style="border-radius: 12px; border: 1px solid var(--warning);">
-                        <i class="bi bi-info-circle me-2"></i>
-                        <strong>Внимание!</strong> Это действие нельзя отменить. Все данные пользователя будут удалены навсегда. Пользователи с ролью администратора не могут быть удалены.
-                    </div>
-                </div>
-                <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
-                    <form id="deleteUserForm" method="POST" style="display: none;">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-width: 1px; border-radius: 12px; font-weight: 600; padding: 12px 24px;">
-                        <i class="bi bi-x-circle me-2"></i>Отмена
-                    </button>
-                    <button type="button" class="btn btn-outline-danger" id="confirmDeleteUserBtn" style="border-width: 1px; border-radius: 12px; font-weight: 600; padding: 12px 24px;">
-                        <i class="bi bi-trash me-2"></i>Да, удалить
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Add Region Modal
-            const addRegionModal = document.getElementById('addRegionModal');
-            const addRegionForm = document.getElementById('addRegionForm');
-            const addRegionNameInput = document.getElementById('addRegionName');
+            // Add City Modal
+            const addCityModal = document.getElementById('addCityModal');
+            const addCityForm = document.getElementById('addCityForm');
+            const addCityNameInput = document.getElementById('addCityName');
+            const addCityRegionSelect = document.getElementById('addCityRegion');
 
-            if (addRegionModal) {
-                addRegionModal.addEventListener('show.bs.modal', function () {
+            if (addCityModal) {
+                addCityModal.addEventListener('show.bs.modal', function () {
                     // Очищаем форму при открытии модального окна
-                    if (addRegionForm) {
-                        addRegionForm.reset();
+                    if (addCityForm) {
+                        addCityForm.reset();
                     }
-                    if (addRegionNameInput) {
-                        addRegionNameInput.value = '';
+                    if (addCityNameInput) {
+                        addCityNameInput.value = '';
+                    }
+                    if (addCityRegionSelect) {
+                        addCityRegionSelect.value = '';
                     }
                 });
             }
 
-            // Edit Region Modal
-            const editRegionModal = document.getElementById('editRegionModal');
-            const editRegionForm = document.getElementById('editRegionForm');
-            const editRegionNameInput = document.getElementById('editRegionName');
+            // Edit City Modal
+            const editCityModal = document.getElementById('editCityModal');
+            const editCityForm = document.getElementById('editCityForm');
+            const editCityNameInput = document.getElementById('editCityName');
+            const editCityRegionSelect = document.getElementById('editCityRegion');
 
-            if (editRegionModal) {
-                editRegionModal.addEventListener('show.bs.modal', function (event) {
+            if (editCityModal) {
+                editCityModal.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
-                    const regionId = button.getAttribute('data-region-id');
-                    const regionName = button.getAttribute('data-region-name');
+                    const cityId = button.getAttribute('data-city-id');
+                    const cityName = button.getAttribute('data-city-name');
+                    const cityRegionId = button.getAttribute('data-city-region-id');
 
-                    // Заполняем форму данными региона
-                    editRegionNameInput.value = regionName || '';
+                    // Заполняем форму данными города
+                    editCityNameInput.value = cityName || '';
+                    editCityRegionSelect.value = cityRegionId || '';
                     
                     // Устанавливаем action формы
-                    editRegionForm.action = `{{ route('admin.regions.update', ':id') }}`.replace(':id', regionId);
+                    editCityForm.action = `{{ route('admin.cities.update', ':id') }}`.replace(':id', cityId);
                 });
             }
 
-            // Delete Region Modal
-            const deleteRegionModal = document.getElementById('deleteRegionModal');
-            const deleteRegionForm = document.getElementById('deleteRegionForm');
-            const regionNameToDelete = document.getElementById('regionNameToDelete');
+            // Delete City Modal
+            const deleteCityModal = document.getElementById('deleteCityModal');
+            const deleteCityForm = document.getElementById('deleteCityForm');
+            const cityNameToDelete = document.getElementById('cityNameToDelete');
 
-            if (deleteRegionModal) {
-                deleteRegionModal.addEventListener('show.bs.modal', function (event) {
+            if (deleteCityModal) {
+                deleteCityModal.addEventListener('show.bs.modal', function (event) {
                     const button = event.relatedTarget;
-                    const regionId = button.getAttribute('data-region-id');
-                    const regionName = button.getAttribute('data-region-name');
+                    const cityId = button.getAttribute('data-city-id');
+                    const cityName = button.getAttribute('data-city-name');
 
-                    // Заполняем данные региона
-                    regionNameToDelete.textContent = regionName || '';
+                    // Заполняем данные города
+                    cityNameToDelete.textContent = cityName || '';
                     
                     // Устанавливаем action формы
-                    deleteRegionForm.action = `{{ route('admin.regions.destroy', ':id') }}`.replace(':id', regionId);
-                });
-            }
-
-            // Delete User Modal
-            const deleteUserModal = document.getElementById('deleteUserModal');
-            const deleteUserForm = document.getElementById('deleteUserForm');
-            const userNameElement = document.getElementById('userNameToDelete');
-            const userEmailElement = document.getElementById('userEmailToDelete');
-            const confirmDeleteUserBtn = document.getElementById('confirmDeleteUserBtn');
-
-            if (deleteUserModal) {
-                deleteUserModal.addEventListener('show.bs.modal', function (event) {
-                    const button = event.relatedTarget;
-                    const userId = button.getAttribute('data-user-id');
-                    const userName = button.getAttribute('data-user-name');
-                    const userEmail = button.getAttribute('data-user-email');
-
-                    userNameElement.textContent = userName;
-                    userEmailElement.textContent = userEmail;
-                    deleteUserForm.action = '{{ route("users.destroy", ":id") }}'.replace(':id', userId);
-                });
-
-                confirmDeleteUserBtn.addEventListener('click', function() {
-                    deleteUserForm.submit();
+                    deleteCityForm.action = `{{ route('admin.cities.destroy', ':id') }}`.replace(':id', cityId);
                 });
             }
         });
     </script>
 
 @endsection
-
