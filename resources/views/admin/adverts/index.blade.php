@@ -60,55 +60,60 @@
                             <label for="status" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
                                 <i class="bi bi-funnel me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Статус
                             </label>
-                            <select
-                                class="form-select form-select-sm"
-                                id="status"
-                                name="status"
-                                style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
-                                onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
-                                onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
-                            >
-                                <option value="">Все статусы</option>
-                                <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>На проверке</option>
-                                <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Одобрено</option>
-                                <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Отклонено</option>
-                                <option value="revision" {{ request('status') === 'revision' ? 'selected' : '' }}>На доработку</option>
-                            </select>
+                            <div style="position: relative; width: 100%;">
+                                <select
+                                    class="form-select form-select-sm"
+                                    id="status"
+                                    name="status"
+                                    style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease; width: 100%; max-width: 100%; box-sizing: border-box;"
+                                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
+                                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
+                                >
+                                    <option value="">Все статусы</option>
+                                    <option value="pending" {{ request('status') === 'pending' ? 'selected' : '' }}>На проверке</option>
+                                    <option value="approved" {{ request('status') === 'approved' ? 'selected' : '' }}>Одобрено</option>
+                                    <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Отклонено</option>
+                                    <option value="revision" {{ request('status') === 'revision' ? 'selected' : '' }}>На доработку</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-3">
                             <label for="filter_region_id" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
                                 <i class="bi bi-geo-alt me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Область
                             </label>
-                            <select
-                                class="form-select form-select-sm"
-                                id="filter_region_id"
-                                name="region_id"
-                                style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
-                                onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
-                                onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
-                            >
-                                <option value="">Все области</option>
-                                @foreach($regions as $region)
-                                    <option value="{{ $region->id }}" {{ request('region_id') == $region->id ? 'selected' : '' }}>
-                                        {{ $region->name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div style="position: relative; width: 100%;">
+                                <select
+                                    class="form-select form-select-sm"
+                                    id="filter_region_id"
+                                    name="region_id"
+                                    style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease; width: 100%; max-width: 100%; box-sizing: border-box;"
+                                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
+                                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
+                                >
+                                    <option value="">Все области</option>
+                                    @foreach($regions as $region)
+                                        <option value="{{ $region->id }}" {{ request('region_id') == $region->id ? 'selected' : '' }}>
+                                            {{ $region->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-md-2">
                             <label for="filter_city_id" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
                                 <i class="bi bi-geo me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Город
                             </label>
-                            <select
-                                class="form-select form-select-sm"
-                                id="filter_city_id"
-                                name="city_id"
-                                style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
-                                {{ !request('region_id') ? 'disabled' : '' }}
-                                onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
-                                onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
-                            >
-                                <option value="">Все города</option>
+                            <div style="position: relative; width: 100%;">
+                                <select
+                                    class="form-select form-select-sm"
+                                    id="filter_city_id"
+                                    name="city_id"
+                                    style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease; width: 100%; max-width: 100%; box-sizing: border-box;"
+                                    {{ !request('region_id') ? 'disabled' : '' }}
+                                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
+                                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
+                                >
+                                    <option value="">Все города</option>
                                 @if(request('region_id'))
                                     @foreach($cities as $city)
                                         <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>
@@ -117,6 +122,7 @@
                                     @endforeach
                                 @endif
                             </select>
+                            </div>
                         </div>
                     </div>
 
@@ -704,5 +710,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
+@push('styles')
+    <style>
+        #status, #filter_region_id, #filter_city_id {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
+        }
+        
+        /* Ограничиваем ширину выпадающего списка */
+        #status option, #filter_region_id option, #filter_city_id option {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+@endpush
 
 @endsection
