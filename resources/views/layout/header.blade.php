@@ -267,7 +267,8 @@
             background: rgba(255, 255, 255, 0.05);
             border-color: var(--accent-green);
             color: var(--accent-green);
-            transform: translateY(-2px);
+            /* Убрали движение кнопки при ховере */
+            transform: none;
         }
         
         /* Icons */

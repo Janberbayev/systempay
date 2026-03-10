@@ -31,7 +31,7 @@
                     @if (Route::has('login'))
                         @auth
                             <div class="dropdown">
-                                <button class="btn btn-creative-secondary rounded px-4 dropdown-toggle"
+                                <button class="btn btn-primary rounded px-4 dropdown-toggle"
                                         type="button"
                                         id="userDropdown"
                                         data-bs-toggle="dropdown"
@@ -65,7 +65,7 @@
                                 </ul>
                             </div>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-creative-accent rounded px-4">Войти</a>
+                            <a href="{{ route('login') }}" class="btn btn-primary rounded px-4">Войти</a>
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="btn btn-creative-accent rounded px-4 ms-2">Регистрация</a>
                             @endif
