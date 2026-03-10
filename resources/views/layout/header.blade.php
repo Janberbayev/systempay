@@ -211,7 +211,8 @@
         }
         
         .card-creative:hover {
-            transform: translateY(-4px);
+            /* Не двигаем карточку при ховере */
+            transform: none;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             border-color: var(--accent-green);
             background: var(--bg-card-hover);
@@ -239,7 +240,10 @@
         .btn-creative-secondary {
             background: var(--accent-blue);
             color: white;
+            font-weight: 600;
             border: none;
+            padding: 14px 32px;
+            border-radius: 12px;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             transition: all 0.2s ease;
         }
@@ -335,7 +339,8 @@
         }
         
         .role-card-creative:hover {
-            transform: translateY(-4px);
+            /* Убрали движение карточки при ховере */
+            transform: none;
             box-shadow: 0 8px 32px var(--shadow);
             border-color: var(--accent-green);
             background: var(--bg-card-hover);
@@ -423,14 +428,14 @@
             color: var(--text-primary);
             border-radius: 12px;
         }
-        
+
         .form-control:focus {
             background: var(--bg-card-hover);
             border-color: var(--accent-green);
             color: var(--text-primary);
             box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
         }
-        
+
         .form-control::placeholder {
             color: var(--text-muted);
         }

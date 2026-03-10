@@ -61,7 +61,7 @@
                                                     {{ $advert->admin_comment }}
                                                 </div>
                                                 <div class="mt-3">
-                                                    <a href="{{ route('edit-ads', $advert) }}" class="btn btn-sm" style="background: var(--primary); color: white; border-radius: 8px; padding: 6px 12px;">
+                                                    <a href="{{ route('edit-ads', $advert) }}" class="btn btn-creative btn-sm">
                                                         <i class="bi bi-eye me-1"></i>Посмотреть объявление и внести изменения
                                                     </a>
                                                 </div>

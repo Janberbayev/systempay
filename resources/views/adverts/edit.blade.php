@@ -46,36 +46,32 @@
                                 @method('PUT')
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Область</label>
-                                    <div style="position: relative; width: 100%;">
-                                        <select
-                                            name="region_id"
-                                            id="region_id"
-                                            class="form-control form-control-lg"
-                                            style="border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); width: 100%; max-width: 100%; box-sizing: border-box;"
-                                        >
-                                            <option value="">Выберите область</option>
-                                            @foreach($regions as $region)
-                                                <option value="{{ $region->id }}" {{ old('region_id', $advert->region_id) == $region->id ? 'selected' : '' }}>
-                                                    {{ $region->name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    <select
+                                        name="region_id"
+                                        id="region_id"
+                                        class="form-control form-control-lg"
+                                        style="border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary);"
+                                    >
+                                        <option value="">Выберите область</option>
+                                        @foreach($regions as $region)
+                                            <option value="{{ $region->id }}" {{ old('region_id', $advert->region_id) == $region->id ? 'selected' : '' }}>
+                                                {{ $region->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Город</label>
-                                    <div style="position: relative; width: 100%;">
-                                        <select
-                                            name="city_id"
-                                            id="city_id"
-                                            class="form-control form-control-lg"
-                                            style="border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); width: 100%; max-width: 100%; box-sizing: border-box;"
-                                            disabled
-                                        >
-                                            <option value="">Сначала выберите область</option>
-                                        </select>
-                                    </div>
+                                    <select
+                                        name="city_id"
+                                        id="city_id"
+                                        class="form-control form-control-lg"
+                                        style="border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary);"
+                                        disabled
+                                    >
+                                        <option value="">Сначала выберите область</option>
+                                    </select>
                                 </div>
 
                                 <div class="mb-3">
@@ -100,11 +96,27 @@
                                         required
                                     >{{ old('content', $advert->content) }}</textarea>
                                 </div>
-
-                                <button type="submit" class="btn btn-creative w-100">
-                                    <i class="bi bi-plus-circle me-2"></i>Сохранить и отправить модератору
-                                </button>
+                                <div class="mt-4">
+                                    <button type="submit" class="btn btn-creative w-100 w-md-auto">
+                                        <i class="bi bi-plus-circle me-2"></i>Сохранить и отправить модератору
+                                    </button>
+                                </div>
                             </form>
+
+                            @can('delete ads')
+                                @if(auth()->id() === $advert->user_id)
+                                    <form method="POST"
+                                          action="{{ route('delete-ads', $advert) }}"
+                                          class="mt-3"
+                                          onsubmit="return confirm('Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-outline-danger w-100 w-md-auto">
+                                            <i class="bi bi-trash me-2"></i>Удалить
+                                        </button>
+                                    </form>
+                                @endif
+                            @endcan
                         @endif
 
                     </div>
@@ -112,23 +124,6 @@
             </div>
         </div>
     </section>
-
-    @push('styles')
-        <style>
-            #region_id, #city_id {
-                width: 100% !important;
-                max-width: 100% !important;
-                box-sizing: border-box !important;
-            }
-            
-            /* Ограничиваем ширину выпадающего списка */
-            #region_id option, #city_id option {
-                max-width: 100%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        </style>
-    @endpush
 
     @push('scripts')
         <script>

@@ -191,20 +191,18 @@
                                 <i class="bi bi-map me-2" style="color: var(--primary);"></i>
                                 Регион
                             </label>
-                            <div style="position: relative; width: 100%;">
-                                <select
-                                    class="form-control"
-                                    id="addCityRegion"
-                                    name="region_id"
-                                    required
-                                    style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px; width: 100%; max-width: 100%; box-sizing: border-box;"
-                                >
-                                    <option value="">Выберите регион</option>
-                                    @foreach($regions as $region)
-                                        <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <select
+                                class="form-control"
+                                id="addCityRegion"
+                                name="region_id"
+                                required
+                                style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px;"
+                            >
+                                <option value="">Выберите регион</option>
+                                @foreach($regions as $region)
+                                    <option value="{{ $region->id }}" {{ old('region_id') == $region->id ? 'selected' : '' }}>{{ $region->name }}</option>
+                                @endforeach
+                            </select>
                             @error('region_id')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
@@ -297,20 +295,18 @@
                                 <i class="bi bi-map me-2" style="color: var(--primary);"></i>
                                 Регион
                             </label>
-                            <div style="position: relative; width: 100%;">
-                                <select
-                                    class="form-control"
-                                    id="editCityRegion"
-                                    name="region_id"
-                                    required
-                                    style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px; width: 100%; max-width: 100%; box-sizing: border-box;"
-                                >
-                                    <option value="">Выберите регион</option>
-                                    @foreach($regions as $region)
-                                        <option value="{{ $region->id }}">{{ $region->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <select
+                                class="form-control"
+                                id="editCityRegion"
+                                name="region_id"
+                                required
+                                style="border-width: 2px; border-color: var(--border-color); border-radius: 12px; padding: 12px;"
+                            >
+                                <option value="">Выберите регион</option>
+                                @foreach($regions as $region)
+                                    <option value="{{ $region->id }}">{{ $region->name }}</option>
+                                @endforeach
+                            </select>
                             @error('region_id')
                                 <div class="text-danger mt-2">{{ $message }}</div>
                             @enderror
@@ -328,23 +324,6 @@
             </div>
         </div>
     </div>
-
-    @push('styles')
-        <style>
-            #addCityRegion, #editCityRegion {
-                width: 100% !important;
-                max-width: 100% !important;
-                box-sizing: border-box !important;
-            }
-            
-            /* Ограничиваем ширину выпадающего списка */
-            #addCityRegion option, #editCityRegion option {
-                max-width: 100%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        </style>
-    @endpush
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

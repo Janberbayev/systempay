@@ -123,25 +123,23 @@
                             <p class="text-muted mb-3">
                                 Выберите роль для этого пользователя. Роль определяет права доступа в системе.
                             </p>
-                            <div style="position: relative; width: 100%;">
-                                <select
-                                    name="role_id"
-                                    id="role_id"
-                                    class="form-select form-select-lg"
-                                    style="border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; font-weight: 500; width: 100%; max-width: 100%; box-sizing: border-box;"
-                                    required
-                                >
-                                    <option value="">-- Выберите роль --</option>
-                                    @foreach($roles as $role)
-                                        <option
-                                            value="{{$role->id}}"
-                                            @if($user->hasRole($role->name)) selected @endif
-                                        >
-                                            {{$role->name}}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <select
+                                name="role_id"
+                                id="role_id"
+                                class="form-select form-select-lg"
+                                style="border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; font-weight: 500;"
+                                required
+                            >
+                                <option value="">-- Выберите роль --</option>
+                                @foreach($roles as $role)
+                                    <option
+                                        value="{{$role->id}}"
+                                        @if($user->hasRole($role->name)) selected @endif
+                                    >
+                                        {{$role->name}}
+                                    </option>
+                                @endforeach
+                            </select>
                             <small class="form-text text-muted mt-2">
                                 <i class="bi bi-info-circle me-1"></i>
                                 Пользователь может иметь только одну роль
@@ -193,19 +191,6 @@
     .form-control:focus {
         border-color: var(--primary);
         box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.15);
-    }
-    
-    #role_id {
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-    }
-    
-    /* Ограничиваем ширину выпадающего списка */
-    #role_id option {
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 </style>
 @endsection

@@ -15,13 +15,9 @@
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div>
-                        <h1 class="display-4 fw-black mb-3" style="color: var(--text-primary);">
-                            <i class="bi bi-megaphone me-2" style="color: var(--accent-green);"></i>
+                        <h1 class="display-6 fw-black mb-3" style="color: var(--text-primary);">
                             Список объявлений
                         </h1>
-                        <p class="lead mb-0" style="color: var(--text-secondary);">
-                            Просмотр и управление объявлениями
-                        </p>
                     </div>
                     @can('add ads')
                         <a href="{{ route('add-ads') }}" class="btn btn-creative">
@@ -158,7 +154,7 @@
                                 <i class="bi bi-calendar me-1"></i>
                                 {{ $advert->created_at->format('d.m.Y') }}
                             </small>
-                            <a href="#" class="btn btn-creative-accent btn-sm">
+                            <a href="{{ route('show-ads', $advert) }}" class="btn btn-creative-accent btn-sm">
                                 Подробнее <i class="bi bi-arrow-right ms-1"></i>
                             </a>
                         </div>

@@ -86,8 +86,10 @@ Route::middleware('auth')->group(function () {
     Route::get('list-ads', [AdvertController::class, 'index'])->name('list-ads')->middleware('can:view ads');
     Route::get('add-ads', [AdvertController::class, 'create'])->name('add-ads')->middleware('can:add ads');
     Route::post('store-ads', [AdvertController::class, 'store'])->name('store-ads')->middleware('can:add ads');
+    Route::get('show-ads/{advert}', [AdvertController::class, 'show'])->name('show-ads')->middleware('can:view ads');
     Route::get('edit-ads/{advert}', [AdvertController::class, 'edit'])->name('edit-ads')->middleware('can:edit ads');
     Route::put('update-ads/{advert}', [AdvertController::class, 'update'])->name('update-ads')->middleware('can:edit ads');
+    Route::delete('delete-ads/{advert}', [AdvertController::class, 'destroy'])->name('delete-ads')->middleware('can:delete ads');
 
     Route::get('my-ads', [DashboardController::class, 'myAds'])->name('my-ads');
 

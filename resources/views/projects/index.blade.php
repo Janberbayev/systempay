@@ -4,32 +4,15 @@
 
     <section class="section-creative" style="padding: 60px 0;">
         <div class="container">
-            @role('admin')
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="text-center mb-4">
-                        <h1 class="display-4 fw-black mb-3">
-                            <i class="bi bi-shield-check me-2" style="color: var(--primary);"></i>
-                            Админ-панель
-                        </h1>
-                    </div>
-                </div>
-            </div>
-            @include('components.admin-nav')
-            @endrole
 
             <!-- Header -->
             <div class="row mb-5">
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                            <h1 class="display-4 fw-black mb-3" style="color: var(--text-primary);">
-                                <i class="bi bi-megaphone me-2" style="color: var(--accent-green);"></i>
-                                Список объявлений проектов
+                            <h1 class="display-6 fw-black mb-3" style="color: var(--text-primary);">
+                                Список проектов
                             </h1>
-                            <p class="lead mb-0" style="color: var(--text-secondary);">
-                                Просмотр и управление объявлениями проектов
-                            </p>
                         </div>
                         @can('add projects')
                             <a href="#" class="btn btn-creative">

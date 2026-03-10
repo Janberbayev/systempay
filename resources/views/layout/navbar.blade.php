@@ -65,7 +65,7 @@
                                 </ul>
                             </div>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-creative-secondary rounded px-4">Войти</a>
+                            <a href="{{ route('login') }}" class="btn btn-creative-accent rounded px-4">Войти</a>
                             @if (Route::has('register'))
                                 <a href="{{ route('register') }}" class="btn btn-creative-accent rounded px-4 ms-2">Регистрация</a>
                             @endif

@@ -86,6 +86,11 @@ class AdvertController extends Controller
         return redirect()->back()->with('success', 'Объявление отправлено на модерацию.');
     }
 
+    public function show(Advert $advert)
+    {
+        return view('adverts.show', compact('advert'));
+    }
+
     //пока не пользовался
     public function edit(Advert $advert)
     {
@@ -111,6 +116,18 @@ class AdvertController extends Controller
         ]);
 
         return back()->with('success', 'Исправлено и отправлено на повторную проверку');
+    }
+
+    /**
+     * Удаление объявления пользователем‑создателем.
+     */
+    public function destroy(Advert $advert)
+    {
+        abort_if($advert->user_id !== auth()->id(), 403);
+
+        $advert->delete();
+
+        return redirect()->route('list-ads')->with('success', 'Объявление удалено.');
     }
 
     public function restore(Advert $advert)
