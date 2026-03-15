@@ -21,7 +21,7 @@
             @endif
 
             <div class="text-center mb-5">
-                <h2 class="display-5 fw-black mb-3">Редактирование объявление</h2>
+                <h2 class="display-3 fw-black mb-3">Создание проекта</h2>
             </div>
             <div class="row g-4">
                 <div class="col-md-6 mx-auto">
@@ -31,15 +31,15 @@
                                 <i class="bi bi-briefcase"></i>
                             </div>
                             <div>
-                                <h4 class="fw-black mb-0">Исполнитель</h4>
+                                <h4 class="fw-black mb-0">Заказчик</h4>
                             </div>
                         </div>
                         <p class="mb-4">
-                            Получайте доступ к качественным проектам, выстраивайте репутацию и защищайте свои интересы.
+                            Размещайте задачи, выбирайте исполнителей по рейтингу и портфолио, контролируйте ход работ через этапы.
                         </p>
 
-                        @if(auth()->user()->can('edit ads'))
-                            <form method="POST" action="{{route('update-ads', $advert)}}">
+                        @if(auth()->user()->can('edit projects'))
+                            <form method="POST" action="{{route('update-project', $project)}}">
                                 @csrf
                                 @method('PUT')
                                 <div class="mb-3">
@@ -52,7 +52,7 @@
                                     >
                                         <option value="">Выберите область</option>
                                         @foreach($regions as $region)
-                                            <option value="{{ $region->id }}" {{ old('region_id', $advert->region_id) == $region->id ? 'selected' : '' }}>
+                                            <option value="{{ $region->id }}" {{ old('region_id', $project->region_id) == $region->id ? 'selected' : '' }}>
                                                 {{ $region->name }}
                                             </option>
                                         @endforeach
@@ -73,13 +73,13 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label fw-bold">Название объявления</label>
+                                    <label class="form-label fw-bold">Название проекта</label>
                                     <input
                                         type="text"
                                         class="form-control form-control-lg"
                                         name="title"
-                                        value="{{ old('title', $advert->title) }}"
-                                        placeholder="Введите название объявления"
+                                        value="{{ old('title', $project->title) }}"
+                                        placeholder="Введите название проекта"
                                         required
                                     >
                                 </div>
@@ -89,10 +89,10 @@
                                     <textarea
                                         rows="5"
                                         class="form-control form-control-lg"
-                                        name="content"
+                                        name="description"
                                         placeholder="Опишите ваше объявление..."
                                         required
-                                    >{{ old('content', $advert->content) }}</textarea>
+                                    >{{ old('content', $project->description) }}</textarea>
                                 </div>
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-creative w-100 w-md-auto">
@@ -101,12 +101,12 @@
                                 </div>
                             </form>
 
-                            @can('delete ads')
-                                @if(auth()->id() === $advert->user_id)
+                            @can('delete projects')
+                                @if(auth()->id() === $project->user_id)
                                     <form method="POST"
-                                          action="{{ route('delete-ads', $advert) }}"
+                                          action="{{ route('delete-project', $project) }}"
                                           class="mt-3"
-                                          onsubmit="return confirm('Вы уверены, что хотите удалить это объявление? Это действие нельзя отменить.');">
+                                          onsubmit="return confirm('Вы уверены, что хотите удалить проект? Это действие нельзя отменить.');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-outline-danger w-100 w-md-auto">
@@ -160,7 +160,7 @@
                             citySelect.disabled = false;
 
                             // Восстанавливаем выбранный город при ошибках валидации или из модели
-                            const oldCityId = @json(old('city_id', $advert->city_id));
+                            const oldCityId = @json(old('city_id', $project->city_id));
                             if (oldCityId) {
                                 citySelect.value = oldCityId;
                             }
@@ -173,7 +173,7 @@
                 });
 
                 // Если есть выбранная область при загрузке (например, после ошибки валидации или из модели)
-                const oldRegionId = @json(old('region_id', $advert->region_id));
+                const oldRegionId = @json(old('region_id', $project->region_id));
                 if (oldRegionId) {
                     regionSelect.value = oldRegionId;
                     regionSelect.dispatchEvent(new Event('change'));

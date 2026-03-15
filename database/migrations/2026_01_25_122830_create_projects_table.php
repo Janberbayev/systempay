@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
 //            $table->boolean('is_approved')->default(false);
-            $table->string('status', 20)->default('pending');;
+            $table->string('moderation_status', 20)->default('pending');;
             $table->text('admin_comment')->nullable();
             $table->foreignId('region_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('city_id')->nullable()->constrained()->nullOnDelete();

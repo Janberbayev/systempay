@@ -25,7 +25,7 @@ class DashboardController extends Controller
         // Получаем проекты пользователя с комментариями админа
         $projectsWithComments = Project::where('user_id', $user->id)
             ->whereNotNull('admin_comment')
-            ->whereIn('status', ['rejected', 'revision'])
+            ->whereIn('moderation_status', ['rejected', 'revision'])
             ->with(['region', 'city'])
             ->orderBy('updated_at', 'desc')
             ->get();
@@ -76,7 +76,7 @@ class DashboardController extends Controller
         // Получаем проекты пользователя с комментариями админа
         $projectsWithComments = Project::where('user_id', $user->id)
             ->whereNotNull('admin_comment')
-            ->whereIn('status', ['rejected', 'revision'])
+            ->whereIn('moderation_status', ['rejected', 'revision'])
             ->with(['region', 'city'])
             ->orderBy('updated_at', 'desc')
             ->get();

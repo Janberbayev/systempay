@@ -15,7 +15,7 @@
                             </h1>
                         </div>
                         @can('add projects')
-                            <a href="#" class="btn btn-creative">
+                            <a href="{{route('add-project')}}" class="btn btn-creative">
                                 <i class="bi bi-plus-circle me-2"></i>Создать проект
                             </a>
                         @endcan
@@ -91,7 +91,7 @@
                                     <i class="bi bi-calendar me-1"></i>
                                     {{ $project->created_at->format('d.m.Y') }}
                                 </small>
-                                <a href="#" class="btn btn-creative-accent btn-sm">
+                                <a href="{{ route('show-project', $project) }}" class="btn btn-creative-accent btn-sm">
                                     Подробнее <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
                             </div>

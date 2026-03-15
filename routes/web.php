@@ -82,6 +82,10 @@ Route::middleware('auth')->group(function () {
     Route::get('list-project', [ProjectController::class, 'index'])->name('list-project')->middleware('can:view projects');
     Route::get('add-project', [ProjectController::class, 'create'])->name('add-project')->middleware('can:add projects');
     Route::post('store-project', [ProjectController::class, 'store'])->name('store-project')->middleware('can:add projects');
+    Route::get('show-project/{project}', [ProjectController::class, 'show'])->name('show-project')->middleware('can:view projects');
+    Route::get('edit-project/{project}', [ProjectController::class, 'edit'])->name('edit-project')->middleware('can:edit projects');
+    Route::put('update-project/{project}', [ProjectController::class, 'update'])->name('update-project')->middleware('can:edit projects');
+    Route::delete('delete-project/{project}', [ProjectController::class, 'destroy'])->name('delete-project')->middleware('can:delete projects');
 
     Route::get('list-ads', [AdvertController::class, 'index'])->name('list-ads')->middleware('can:view ads');
     Route::get('add-ads', [AdvertController::class, 'create'])->name('add-ads')->middleware('can:add ads');

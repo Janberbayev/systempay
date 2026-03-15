@@ -91,7 +91,7 @@ class AdvertController extends Controller
         return view('adverts.show', compact('advert'));
     }
 
-    //пока не пользовался
+
     public function edit(Advert $advert)
     {
         abort_if($advert->user_id !== auth()->id(), 403);

@@ -63,4 +63,36 @@ class ProjectController extends Controller
 
         return redirect()->back()->with('success', 'Ваш Проект отправлен на модерацию!');
     }
+
+    public function show(Project $project)
+    {
+        return view('projects.show', compact('project'));
+    }
+
+    public function edit(Project $project)
+    {
+        abort_if($project->user_id !== auth()->id(), 403);
+        $regions = Region::all();
+
+        return view('projects.edit', compact('project', 'regions'));
+    }
+
+    public function update(Request $request, Project $project)
+    {
+        abort_if($project->user_id !== auth()->id(), 403);
+
+        $project->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'moderation_status' => Project::MOD_PROJECT_PENDING,
+            'admin_comment' => null,
+            'expires_at' => now()->addDays(10),
+            'region_id' => $request->region_id,
+            'city_id' => $request->city_id,
+        ]);
+
+        return back()->with('success', 'Исправлено и отправлено на повторную проверку');
+    }
+
+
 }

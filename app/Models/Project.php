@@ -11,7 +11,7 @@ class Project extends Model
         'title',
         'description',
 //        'is_approved',
-        'status',
+        'moderation_status',
         'admin_comment',
         'region_id',
         'city_id',
@@ -39,7 +39,7 @@ class Project extends Model
 
     public function statusLabel(): array
     {
-        return match ($this->status) {
+        return match ($this->moderation_status) {
             self::MOD_PROJECT_PENDING  => ['На проверке', 'secondary'],
             self::MOD_PROJECT_APPROVED => ['Одобрен', 'success'],
             self::MOD_PROJECT_REJECTED => ['Отклонён', 'danger'],

@@ -218,15 +218,15 @@
                                     </div>
                                 </td>
                                 <td class="text-center" style="padding: 4px 8px;">
-                                    @if($project->status === 'pending')
+                                    @if($project->moderation_status === 'pending')
                                         <span class="badge bg-warning text-dark" style="font-size: 0.75rem; padding: 3px 6px;">
                                             <i class="bi bi-clock-history me-1"></i>На проверке
                                         </span>
-                                    @elseif($project->status === 'approved')
+                                    @elseif($project->moderation_status === 'approved')
                                         <span class="badge bg-success" style="font-size: 0.75rem; padding: 3px 6px;">
                                             <i class="bi bi-check-circle me-1"></i>Одобрено
                                         </span>
-                                    @elseif($project->status === 'rejected')
+                                    @elseif($project->moderation_status === 'rejected')
                                         <div class="d-flex flex-column align-items-center gap-1">
                                             <span class="badge bg-danger" style="font-size: 0.75rem; padding: 3px 6px;">Отклонён</span>
                                             @if($project->admin_comment)
@@ -236,7 +236,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                    @elseif($project->status === 'revision')
+                                    @elseif($project->moderation_status === 'revision')
                                         <div class="d-flex flex-column align-items-center gap-1">
                                             <span class="badge bg-warning text-dark" style="font-size: 0.75rem; padding: 3px 6px;">На доработку</span>
                                             @if($project->admin_comment)
