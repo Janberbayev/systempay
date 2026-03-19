@@ -61,6 +61,7 @@
         <div class="row g-4">
             @forelse($adverts as $advert)
                 <div class="col-md-6 col-lg-4">
+                    <a href="{{ route('show-ads', $advert) }}" style="text-decoration: none;">
                     <div class="card-creative p-4 h-100">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div class="flex-grow-1">
@@ -85,66 +86,6 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="dropdown">
-                                <button class="btn btn-sm" type="button" data-bs-toggle="dropdown" style="color: var(--text-secondary); background: transparent; border: none;">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-end">
-                                    @php
-                                        [$label, $color] = $advert->statusLabel();
-                                    @endphp
-                                    <li class="px-3 py-2">
-                                        <small class="text-{{ $color }}">
-                                            @if($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_APPROVED)
-                                                <i class="bi bi-check-circle me-1"></i>
-                                            @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REJECTED)
-                                                <i class="bi bi-x-circle me-1"></i>
-                                            @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REVISION)
-                                                <i class="bi bi-arrow-repeat me-1"></i>
-                                            @else
-                                                <i class="bi bi-clock-history me-1"></i>
-                                            @endif
-                                            {{ $label }}
-                                        </small>
-                                    </li>
-                                    @can('edit ads')
-                                        <li><hr class="dropdown-divider"></li>
-                                        <li>
-                                            <a class="dropdown-item" href="#">
-                                                <i class="bi bi-pencil me-2"></i>Редактировать
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @can('delete ads')
-                                        <li>
-                                            <a class="dropdown-item text-danger" href="#">
-                                                <i class="bi bi-trash me-2"></i>Удалить
-                                            </a>
-                                        </li>
-                                    @endcan
-                                    @role('admin')
-                                        @if($advert->moderation_status !== \App\Models\Advert::MOD_ADVERT_APPROVED)
-                                            <li><hr class="dropdown-divider"></li>
-                                            <li>
-                                                <form action="{{ route('adverts.approve', $advert) }}" method="POST" style="display:inline;">
-                                                    @csrf @method('PATCH')
-                                                    <button type="submit" class="dropdown-item text-success">
-                                                        <i class="bi bi-check-circle me-2"></i>Одобрить
-                                                    </button>
-                                                </form>
-                                            </li>
-                                            <li>
-                                                <form action="{{ route('adverts.reject', $advert) }}" method="POST" style="display:inline;">
-                                                    @csrf @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger" onclick="return confirm('Отклонить и удалить это объявление?')">
-                                                        <i class="bi bi-x-circle me-2"></i>Отклонить
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        @endif
-                                    @endrole
-                                </ul>
-                            </div>
                         </div>
                         <p class="mb-3" style="color: var(--text-secondary); line-height: 1.6;">
                             {{ Str::limit($advert->content, 150) }}
@@ -154,11 +95,12 @@
                                 <i class="bi bi-calendar me-1"></i>
                                 {{ $advert->created_at->format('d.m.Y') }}
                             </small>
-                            <a href="{{ route('show-ads', $advert) }}" class="btn btn-creative-accent btn-sm">
-                                Подробнее <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
+                            <span class="btn btn-creative-accent btn-sm" style="border-radius: 30px; background: #fb923c !important; border: none !important; color: #000 !important;">
+                                {{ $advert->city->name }}
+                            </span>
                         </div>
                     </div>
+                    </a>
                 </div>
             @empty
                 <div class="col-12">

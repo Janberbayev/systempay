@@ -6,7 +6,7 @@
         <div class="container">
 
             <!-- Header -->
-            <div class="row mb-5">
+            <div class="row mb-4">
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
@@ -56,32 +56,12 @@
             <div class="row g-4">
                 @forelse($projects as $project)
                     <div class="col-md-6 col-lg-4">
+                        <a href="{{ route('show-project', $project) }}" style="text-decoration: none;">
                         <div class="card-creative p-4 h-100">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <h5 class="fw-bold mb-0" style="color: var(--text-primary);">
                                     {{ $project->title }}
                                 </h5>
-                                <div class="dropdown">
-                                    <button class="btn btn-sm" type="button" data-bs-toggle="dropdown" style="color: var(--text-secondary); background: transparent; border: none;">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-end">
-                                        @can('edit projects')
-                                            <li>
-                                                <a class="dropdown-item" href="#">
-                                                    <i class="bi bi-pencil me-2"></i>Редактировать
-                                                </a>
-                                            </li>
-                                        @endcan
-                                        @can('delete projects')
-                                            <li>
-                                                <a class="dropdown-item text-danger" href="#">
-                                                    <i class="bi bi-trash me-2"></i>Удалить
-                                                </a>
-                                            </li>
-                                        @endcan
-                                    </ul>
-                                </div>
                             </div>
                             <p class="mb-3" style="color: var(--text-secondary); line-height: 1.6;">
                                 {{ Str::limit($project->description, 150) }}
@@ -91,11 +71,14 @@
                                     <i class="bi bi-calendar me-1"></i>
                                     {{ $project->created_at->format('d.m.Y') }}
                                 </small>
-                                <a href="{{ route('show-project', $project) }}" class="btn btn-creative-accent btn-sm">
-                                    Подробнее <i class="bi bi-arrow-right ms-1"></i>
-                                </a>
+                                <span class="btn btn-creative-accent btn-sm" style="border-radius: 30px; background: var(--accent-green) !important; border: none !important; color: #000 !important;">
+                                    {{ $project->city->name }}
+                                </span>
                             </div>
+
+
                         </div>
+                        </a>
                     </div>
                 @empty
                     <div class="col-12">

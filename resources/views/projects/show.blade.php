@@ -23,7 +23,7 @@
             <div class="row g-4">
                 <div class="col-lg-8 mx-auto">
                     <div class="mb-3">
-                        <a href="{{ route('list-ads') }}" class="text-decoration-none" style="color: var(--text-muted); font-weight: 500;">
+                        <a href="{{ route('list-project') }}" class="text-decoration-none" style="color: var(--text-muted); font-weight: 500;">
                             <i class="bi bi-arrow-left me-1"></i> Назад
                         </a>
                     </div>
