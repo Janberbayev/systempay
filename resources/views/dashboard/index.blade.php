@@ -26,13 +26,13 @@
                                 <span class="tab-label">На сайте</span>
                                 <span class="tab-count">{{ $allAdverts->where('moderation_status', 'approved')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'approved'))->count() }}</span>
                             </a>
-                            <a class="dashboard-tab {{ $activeTab === 'archive' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'archive']) }}">
-                                <span class="tab-label">В архиве</span>
-                                <span class="tab-count">{{ $allAdverts->where('moderation_status', 'rejected')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'rejected'))->count() }}</span>
-                            </a>
                             <a class="dashboard-tab {{ $activeTab === 'pending' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'pending']) }}">
                                 <span class="tab-label">На проверке</span>
                                 <span class="tab-count">{{ $allAdverts->where('moderation_status', 'pending')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'pending'))->count() }}</span>
+                            </a>
+                            <a class="dashboard-tab {{ $activeTab === 'archive' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'archive']) }}">
+                                <span class="tab-label">В архиве</span>
+                                <span class="tab-count">{{ $allAdverts->where('moderation_status', 'rejected')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'rejected'))->count() }}</span>
                             </a>
                         </div>
 
