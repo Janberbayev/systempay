@@ -78,14 +78,14 @@
                                                 <input type="checkbox" class="form-check-input">
                                             </div>
                                             <div class="mailbox-icon">
-                                                <i class="bi {{ $project->status === 'rejected' ? 'bi-x-circle-fill text-danger' : 'bi-arrow-repeat text-warning' }}"></i>
+                                                <i class="bi {{ $project->moderation_status === 'rejected' ? 'bi-x-circle-fill text-danger' : 'bi-arrow-repeat text-warning' }}"></i>
                                             </div>
                                             <div class="mailbox-from">
                                                 <strong>Администратор</strong>
                                             </div>
                                             <div class="mailbox-subject">
-                                                <span class="mailbox-type-badge badge {{ $project->status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark' }} me-2">
-                                                    {{ $project->status === 'rejected' ? 'Отклонено' : 'На доработку' }}
+                                                <span class="mailbox-type-badge badge {{ $project->moderation_status === 'rejected' ? 'bg-danger' : 'bg-warning text-dark' }} me-2">
+                                                    {{ $project->moderation_status === 'rejected' ? 'Отклонено' : 'На доработку' }}
                                                 </span>
                                                 <span>Проект: {{ $project->title }}</span>
                                             </div>
@@ -99,7 +99,7 @@
                                                     <strong>От:</strong> Администратор<br>
                                                     <strong>Кому:</strong> {{ Auth::user()->name }}<br>
                                                     <strong>Дата:</strong> {{ $project->updated_at->format('d.m.Y H:i') }}<br>
-                                                    <strong>Тема:</strong> {{ $project->status === 'rejected' ? 'Отклонено' : 'На доработку' }} - {{ $project->title }}
+                                                    <strong>Тема:</strong> {{ $project->moderation_status === 'rejected' ? 'Отклонено' : 'На доработку' }} - {{ $project->title }}
                                                 </div>
                                                 <div class="mailbox-message-text">
                                                     {{ $project->admin_comment }}
