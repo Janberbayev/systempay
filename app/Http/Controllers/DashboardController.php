@@ -10,9 +10,10 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
+        $activeTab = $request->query('tab', 'on-site');
 
         // Получаем объявления пользователя с комментариями админа
         $advertsWithComments = Advert::where('user_id', $user->id)
@@ -30,18 +31,47 @@ class DashboardController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        // Все объявления и проекты пользователя для отображения
-        $adverts = Advert::where('user_id', $user->id)
+        // Все объявления и проекты пользователя для счетчиков и фильтрации
+        $allAdverts = Advert::where('user_id', $user->id)
             ->with(['region', 'city'])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $projects = Project::where('user_id', $user->id)
+        $allProjects = Project::where('user_id', $user->id)
             ->with(['region', 'city'])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('dashboard.index', compact('advertsWithComments', 'projectsWithComments', 'adverts', 'projects'));
+        $statusMap = [
+            'on-site' => 'approved',
+            'archive' => 'rejected',
+            'pending' => 'pending',
+        ];
+
+        if (!array_key_exists($activeTab, $statusMap)) {
+            $activeTab = 'on-site';
+        }
+
+        $requiredStatus = $statusMap[$activeTab];
+
+        $adverts = $allAdverts->filter(function ($advert) use ($requiredStatus) {
+            return $advert->moderation_status === $requiredStatus;
+        })->values();
+
+        $projects = $allProjects->filter(function ($project) use ($requiredStatus) {
+            $projectStatus = $project->moderation_status ?? $project->status;
+            return $projectStatus === $requiredStatus;
+        })->values();
+
+        return view('dashboard.index', compact(
+            'advertsWithComments',
+            'projectsWithComments',
+            'adverts',
+            'projects',
+            'allAdverts',
+            'allProjects',
+            'activeTab'
+        ));
     }
 
     public function myDeals()

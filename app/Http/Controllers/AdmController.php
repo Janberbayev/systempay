@@ -169,7 +169,7 @@ class AdmController extends Controller
 
         // Фильтр по статусу
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            $query->where('moderation_status', $request->status);
         }
 
         // Фильтр по области
@@ -213,7 +213,7 @@ class AdmController extends Controller
         }
 
         $project->update([
-            'status' => Project::MOD_PROJECT_APPROVED,
+            'moderation_status' => Project::MOD_PROJECT_APPROVED,
             'admin_comment' => null,
         ]);
 
@@ -231,7 +231,7 @@ class AdmController extends Controller
         ]);
 
         $project->update([
-            'status' => Project::MOD_PROJECT_REJECTED,
+            'moderation_status' => Project::MOD_PROJECT_REJECTED,
             'admin_comment' => $request->comment,
         ]);
 
@@ -249,7 +249,7 @@ class AdmController extends Controller
         ]);
 
         $project->update([
-            'status' => Project::MOD_PROJECT_REVISION,
+            'moderation_status' => Project::MOD_PROJECT_REVISION,
             'admin_comment' => $request->comment,
         ]);
 

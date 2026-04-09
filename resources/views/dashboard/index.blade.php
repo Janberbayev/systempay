@@ -22,18 +22,18 @@
 
                         <!-- Status Tabs -->
                         <div class="dashboard-tabs mb-4">
-                            <button class="dashboard-tab active" data-tab="on-site">
+                            <a class="dashboard-tab {{ $activeTab === 'on-site' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'on-site']) }}">
                                 <span class="tab-label">На сайте</span>
-                                <span class="tab-count">{{ $adverts->where('moderation_status', 'approved')->count() + $projects->where('moderation_status', 'approved')->count() }}</span>
-                            </button>
-                            <button class="dashboard-tab" data-tab="archive">
+                                <span class="tab-count">{{ $allAdverts->where('moderation_status', 'approved')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'approved'))->count() }}</span>
+                            </a>
+                            <a class="dashboard-tab {{ $activeTab === 'archive' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'archive']) }}">
                                 <span class="tab-label">В архиве</span>
-                                <span class="tab-count">{{ $adverts->where('moderation_status', 'rejected')->count() + $projects->where('moderation_status', 'rejected')->count() }}</span>
-                            </button>
-                            <button class="dashboard-tab" data-tab="pending">
+                                <span class="tab-count">{{ $allAdverts->where('moderation_status', 'rejected')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'rejected'))->count() }}</span>
+                            </a>
+                            <a class="dashboard-tab {{ $activeTab === 'pending' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'pending']) }}">
                                 <span class="tab-label">На проверке</span>
-                                <span class="tab-count">{{ $adverts->where('moderation_status', 'pending')->count() + $projects->where('moderation_status', 'pending')->count() }}</span>
-                            </button>
+                                <span class="tab-count">{{ $allAdverts->where('moderation_status', 'pending')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'pending'))->count() }}</span>
+                            </a>
                         </div>
 
                         <!-- Список объявлений и проектов -->
@@ -79,7 +79,7 @@
                                             <div class="flex-grow-1">
                                                 <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $project->title }}</h5>
                                                 <p class="text-muted mb-2" style="font-size: 0.9rem;">{{ Str::limit($project->description, 100) }}</p>
-                                                <span class="badge {{ $project->status === 'approved' ? 'bg-success' : ($project->status === 'rejected' ? 'bg-danger' : ($project->status === 'revision' ? 'bg-warning text-dark' : 'bg-secondary')) }}">
+                                                <span class="badge {{ $project->moderation_status === 'approved' ? 'bg-success' : ($project->moderation_status === 'rejected' ? 'bg-danger' : ($project->moderation_status === 'revision' ? 'bg-warning text-dark' : 'bg-secondary')) }}">
                                                 {{ $project->statusLabel()[0] }}
                                             </span>
                                             </div>
@@ -137,6 +137,7 @@
             font-weight: 500;
             position: relative;
             margin-bottom: -2px;
+            text-decoration: none;
         }
 
         .dashboard-tab:hover {
@@ -266,26 +267,4 @@
         }
 
     </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching functionality
-            const tabs = document.querySelectorAll('.dashboard-tab');
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    // Remove active class from all tabs
-                    tabs.forEach(t => t.classList.remove('active'));
-
-                    // Add active class to clicked tab
-                    this.classList.add('active');
-
-                    // Here you can add logic to load different content based on tab
-                    const tabType = this.getAttribute('data-tab');
-                    console.log('Switched to tab:', tabType);
-                });
-            });
-        });
-    </script>
-
 @endsection
