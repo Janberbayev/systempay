@@ -10,21 +10,8 @@ class AdvertController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth()->user();
-        $query = Advert::with('user');
-
-        if ($user?->hasRole('admin')) {
-            // admin — видит всё
-        } elseif ($user) {
-            // user — approved + свои
-            $query->where(function ($q) use ($user) {
-                $q->where('moderation_status', Advert::MOD_ADVERT_APPROVED)
-                    ->orWhere('user_id', $user->id);
-            });
-        } else {
-            // guest — только approved
-            $query->where('moderation_status', Advert::MOD_ADVERT_APPROVED);
-        }
+        $query = Advert::with('user')
+            ->where('moderation_status', Advert::MOD_ADVERT_APPROVED);
 
         // Поиск
         if ($request->has('search') && $request->search) {

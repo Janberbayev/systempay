@@ -11,7 +11,8 @@ class ProjectController extends Controller
 
     public function index(Request $request)
     {
-        $query = Project::query();
+        $query = Project::query()
+            ->where('moderation_status', Project::MOD_PROJECT_APPROVED);
 
         // Поиск
         if ($request->has('search') && $request->search) {

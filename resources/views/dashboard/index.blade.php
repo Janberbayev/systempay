@@ -50,6 +50,14 @@
                                                 <span class="badge {{ $advert->moderation_status === 'approved' ? 'bg-success' : ($advert->moderation_status === 'rejected' ? 'bg-danger' : ($advert->moderation_status === 'revision' ? 'bg-warning text-dark' : 'bg-secondary')) }}">
                                                 {{ $advert->statusLabel()[0] }}
                                             </span>
+                                                @if($activeTab === 'on-site')
+                                                    <p class="dashboard-item-edit mb-0 mt-2">
+                                                        <a href="{{ route('edit-ads', $advert) }}" class="dashboard-edit-link"><i class="bi bi-pencil-square me-1"></i>Редактировать</a>
+                                                    </p>
+                                                @endif
+                                                @if($activeTab === 'on-site' && $label = $advert->remainingActivePublicationLabel())
+                                                    <div class="text-muted mt-2 mb-0" style="font-size: 0.85rem;">{{ $label }}</div>
+                                                @endif
                                             </div>
                                             <small class="text-muted">{{ $advert->created_at->format('d.m.Y') }}</small>
                                         </div>
@@ -82,6 +90,14 @@
                                                 <span class="badge {{ $project->moderation_status === 'approved' ? 'bg-success' : ($project->moderation_status === 'rejected' ? 'bg-danger' : ($project->moderation_status === 'revision' ? 'bg-warning text-dark' : 'bg-secondary')) }}">
                                                 {{ $project->statusLabel()[0] }}
                                             </span>
+                                                @if($activeTab === 'on-site')
+                                                    <p class="dashboard-item-edit mb-0 mt-2">
+                                                        <a href="{{ route('edit-project', $project) }}" class="dashboard-edit-link"><i class="bi bi-pencil-square me-1"></i>Редактировать</a>
+                                                    </p>
+                                                @endif
+                                                @if($activeTab === 'on-site' && $label = $project->remainingActivePublicationLabel())
+                                                    <div class="text-muted mt-2 mb-0" style="font-size: 0.85rem;">{{ $label }}</div>
+                                                @endif
                                             </div>
                                             <small class="text-muted">{{ $project->created_at->format('d.m.Y') }}</small>
                                         </div>
@@ -186,6 +202,30 @@
         .dashboard-link:hover {
             color: var(--accent-green);
             text-decoration: underline;
+        }
+
+        .dashboard-item-edit {
+            line-height: 1.4;
+        }
+
+        .dashboard-edit-link {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s ease, text-decoration 0.2s ease;
+        }
+
+        .dashboard-edit-link:hover {
+            color: var(--accent-green);
+            text-decoration: underline;
+        }
+
+        .dashboard-edit-link .bi {
+            font-size: 1rem;
+            opacity: 0.9;
         }
 
         /* Message Card Styles */

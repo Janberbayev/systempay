@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasPublicationRemainingDays;
 use Illuminate\Database\Eloquent\Model;
 
 class Advert extends Model
 {
+    use HasPublicationRemainingDays;
+
     protected $fillable = [
         'user_id',
         'title',
