@@ -11,7 +11,9 @@ class AdvertController extends Controller
     public function index(Request $request)
     {
         $query = Advert::with('user')
-            ->where('moderation_status', Advert::MOD_ADVERT_APPROVED);
+            ->where('moderation_status', Advert::MOD_ADVERT_APPROVED)
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '>', now());
 
         // Поиск
         if ($request->has('search') && $request->search) {

@@ -12,7 +12,9 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         $query = Project::query()
-            ->where('moderation_status', Project::MOD_PROJECT_APPROVED);
+            ->where('moderation_status', Project::MOD_PROJECT_APPROVED)
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '>', now());
 
         // Поиск
         if ($request->has('search') && $request->search) {
