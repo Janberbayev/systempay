@@ -181,11 +181,12 @@
                         <tr>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">ID</th>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Наименование проекта</th>
-                            <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Описание проекта</th>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Город</th>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Дата создания</th>
+                            <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Дата оконч</th>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Автор</th>
-                            <th class="fw-bold text-center" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Статус</th>
+                            <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Статус объяв</th>
+                            <th class="fw-bold text-center" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Статус Модератора</th>
                             <th class="fw-bold text-center" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Действия</th>
                         </tr>
                     </thead>
@@ -193,8 +194,8 @@
                         @forelse($projects as $project)
                             <tr>
                                 <td style="padding: 4px 8px;">{{ $project->id }}</td>
-                                <td style="padding: 4px 8px; font-size: 0.85rem;">{{ $project->title }}</td>
-                                <td style="padding: 4px 8px; font-size: 0.85rem;">{{ Str::limit($project->description, 50) }}</td>
+                                <td style="padding: 4px 8px; font-size: 0.85rem;"><a href="#">{{ $project->title }}</a></td>
+{{--                                <td style="padding: 4px 8px; font-size: 0.85rem;">{{ Str::limit($project->description, 50) }}</td>--}}
                                 <td style="padding: 4px 8px;">
                                     @if($project->city)
                                         <div class="d-flex align-items-center">
@@ -210,6 +211,7 @@
                                     @endif
                                 </td>
                                 <td style="padding: 4px 8px; font-size: 0.85rem;">{{ $project->created_at->format('d.m.Y H:i') }}</td>
+                                <td style="padding: 4px 8px; font-size: 0.85rem;">{{ $project->expires_at ? $project->expires_at->format('d.m.Y H:i') : '—' }}</td>
                                 <td style="padding: 4px 8px; font-size: 0.85rem;">
                                     <div style="font-size: 0.8rem;">
                                         <strong>{{ $project->user->name }}</strong><br>
@@ -217,6 +219,7 @@
                                         <span class="text-muted" style="font-size: 0.75rem;">{{ $project->user->phone }}</span>
                                     </div>
                                 </td>
+                                <td style="padding: 4px 8px; font-size: 0.85rem;">{{ $project->publication_status }}</td>
                                 <td class="text-center" style="padding: 4px 8px;">
                                     @if($project->moderation_status === 'pending')
                                         <span class="badge bg-warning text-dark" style="font-size: 0.75rem; padding: 3px 6px;">

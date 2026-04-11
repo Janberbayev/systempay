@@ -12,10 +12,15 @@ class Project extends Model
         'description',
 //        'is_approved',
         'moderation_status',
+        'expires_at',
         'admin_comment',
         'region_id',
         'city_id',
         ];
+
+    protected $casts = [
+        'expires_at' => 'datetime',
+    ];
 
     public const MOD_PROJECT_PENDING  = 'pending';
     public const MOD_PROJECT_APPROVED = 'approved';
@@ -56,5 +61,40 @@ class Project extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    // Computed publication status
+    public function getPublicationStatusAttribute(): string
+    {
+        if ($this->moderation_status !== self::MOD_PROJECT_APPROVED) {
+            return 'inactive';
+        }
+
+        if (!$this->expires_at) {
+            return 'inactive';
+        }
+
+        if ($this->expires_at->isPast()) {
+            return 'archived';
+        }
+
+        return 'active';
+    }
+
+    // Активировать на 10 дней
+    public function publish(int $days = 10): void
+    {
+        $this->update([
+            'moderation_status' => self::MOD_PROJECT_APPROVED,
+            'expires_at' => now()->addDays($days),
+        ]);
+    }
+
+    // Восстановить (продлить)
+    public function extend(int $days = 10): void
+    {
+        $this->update([
+            'expires_at' => now()->addDays($days),
+        ]);
     }
 }

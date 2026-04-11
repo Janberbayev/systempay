@@ -24,7 +24,7 @@
                         <div class="dashboard-tabs mb-4">
                             <a class="dashboard-tab {{ $activeTab === 'on-site' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'on-site']) }}">
                                 <span class="tab-label">На сайте</span>
-                                <span class="tab-count">{{ $allAdverts->where('moderation_status', 'approved')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'approved'))->count() }}</span>
+                                <span class="tab-count">{{ $allAdverts->filter(fn ($a) => $a->moderation_status === 'approved' && $a->publication_status === 'active')->count() + $allProjects->filter(fn ($p) => (($p->moderation_status ?? $p->status) === 'approved') && $p->publication_status === 'active')->count() }}</span>
                             </a>
                             <a class="dashboard-tab {{ $activeTab === 'pending' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'pending']) }}">
                                 <span class="tab-label">На проверке</span>
@@ -32,7 +32,7 @@
                             </a>
                             <a class="dashboard-tab {{ $activeTab === 'archive' ? 'active' : '' }}" href="{{ route('dashboard', ['tab' => 'archive']) }}">
                                 <span class="tab-label">В архиве</span>
-                                <span class="tab-count">{{ $allAdverts->where('moderation_status', 'rejected')->count() + $allProjects->filter(fn($project) => (($project->moderation_status ?? $project->status) === 'rejected'))->count() }}</span>
+                                <span class="tab-count">{{ $allAdverts->filter(fn ($a) => $a->moderation_status === 'rejected' || $a->publication_status === 'archived')->count() + $allProjects->filter(fn ($p) => (($p->moderation_status ?? $p->status) === 'rejected') || $p->publication_status === 'archived')->count() }}</span>
                             </a>
                         </div>
 

@@ -56,7 +56,8 @@ class ProjectController extends Controller
             'user_id' => auth()->id(),
             'title' => $request->title,
             'description' => $request->description,
-            'status' => Project::MOD_PROJECT_PENDING,
+            'moderation_status' => Project::MOD_PROJECT_PENDING,
+            'expires_at' => now()->addDays(10),
             'region_id' => $request->region_id,
             'city_id' => $request->city_id,
         ]);

@@ -52,15 +52,26 @@ class DashboardController extends Controller
             $activeTab = 'on-site';
         }
 
-        $requiredStatus = $statusMap[$activeTab];
-
-        $adverts = $allAdverts->filter(function ($advert) use ($requiredStatus) {
-            return $advert->moderation_status === $requiredStatus;
+        $adverts = $allAdverts->filter(function ($advert) use ($activeTab, $statusMap) {
+            return match ($activeTab) {
+                'on-site' => $advert->moderation_status === 'approved'
+                    && $advert->publication_status === 'active',
+                'archive' => $advert->moderation_status === 'rejected'
+                    || $advert->publication_status === 'archived',
+                default => $advert->moderation_status === $statusMap[$activeTab],
+            };
         })->values();
 
-        $projects = $allProjects->filter(function ($project) use ($requiredStatus) {
+        $projects = $allProjects->filter(function ($project) use ($activeTab, $statusMap) {
             $projectStatus = $project->moderation_status ?? $project->status;
-            return $projectStatus === $requiredStatus;
+
+            return match ($activeTab) {
+                'on-site' => $projectStatus === 'approved'
+                    && $project->publication_status === 'active',
+                'archive' => $projectStatus === 'rejected'
+                    || $project->publication_status === 'archived',
+                default => $projectStatus === $statusMap[$activeTab],
+            };
         })->values();
 
         return view('dashboard.index', compact(

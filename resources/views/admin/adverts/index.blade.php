@@ -180,7 +180,7 @@
                     <thead style="background: var(--bg-card-hover);">
                         <tr>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">ID</th>
-                            <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Наименование объявления и ссылка в</th>
+                            <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Наименование и ссылка</th>
 {{--                            <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Содержание объявления</th>--}}
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Город</th>
                             <th class="fw-bold" style="border-bottom: 1px solid var(--border-color); color: var(--text-primary); padding: 6px 8px;">Дата объяв</th>
