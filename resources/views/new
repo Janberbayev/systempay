@@ -10,4 +10,4 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=systempay_db
 DB_USERNAME=systempay_user
-DB_PASSWORD=ваш_пароль
+DB_PASSWORD=ваш_пароль bd331759
