@@ -74,7 +74,12 @@ class ProjectController extends Controller
         $hasOffer = Offer::where('project_id', $project->id)
             ->where('user_id', auth()->id())
             ->exists();
-        return view('projects.show', compact('project', 'hasOffer'));
+
+        $offer = Offer::where('project_id', $project->id)
+            ->where('user_id', auth()->id())
+            ->first();
+
+        return view('projects.show', compact('project', 'hasOffer', 'offer'));
     }
 
     public function edit(Project $project)
