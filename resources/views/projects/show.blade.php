@@ -123,7 +123,7 @@
                                     <span class="badge bg-secondary mb-3 d-inline-block">
                                         ✔ Вы уже отправили предложение
                                     </span>
-                                    @if($offer)
+{{--                                    @if($offer)--}}
                                         <div class="rounded-3 p-3 p-md-4" style="border: 1px solid var(--border-color); background: var(--bg-card-hover); box-shadow: 0 1px 4px var(--shadow);">
                                             <p class="small text-uppercase fw-semibold mb-3" style="letter-spacing: 0.04em; color: var(--text-muted);">
                                                 Ваше предложение
@@ -135,7 +135,7 @@
                                                         <div>
                                                             <div class="small" style="color: var(--text-muted);">Сумма</div>
                                                             <div class="fw-semibold" style="color: var(--text-primary);">
-                                                                {{ number_format((float) $offer->price, 0, '.', ' ') }} <span class="fw-normal" style="color: var(--text-secondary);">₸</span>
+                                                                {{ number_format((float) $project->offer->price, 0, '.', ' ') }} <span class="fw-normal" style="color: var(--text-secondary);">₸</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -146,7 +146,7 @@
                                                         <div>
                                                             <div class="small" style="color: var(--text-muted);">Срок</div>
                                                             <div class="fw-semibold" style="color: var(--text-primary);">
-                                                                {{ $offer->duration }} дн.
+                                                                {{ $project->offer->duration }} дн.
                                                             </div>
                                                         </div>
                                                     </div>
@@ -157,7 +157,7 @@
                                                         <div class="flex-grow-1">
                                                             <div class="small" style="color: var(--text-muted);">Комментарий</div>
                                                             <div style="color: var(--text-secondary); line-height: 1.6;">
-                                                                {{ $offer->comments ? $offer->comments : '—' }}
+                                                                {{ $project->offer->comments ? $offer->comments : '—' }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -165,12 +165,12 @@
                                                 <div class="col-12 pt-3 mt-1" style="border-top: 1px solid var(--border-color);">
                                                     <div class="d-flex align-items-center gap-2 small" style="color: var(--text-secondary);">
                                                         <i class="bi bi-clock-history" style="color: var(--text-muted);"></i>
-                                                        <span>Отправлено {{ $offer->created_at->format('d.m.Y') }} в {{ $offer->created_at->format('H:i') }}</span>
+                                                        <span>Отправлено {{ $project->offer->created_at->format('d.m.Y') }} в {{ $project->offer->created_at->format('H:i') }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+{{--                                    @endif--}}
                                 </div>
                             @endif
 
