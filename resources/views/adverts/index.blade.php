@@ -65,8 +65,8 @@
                     <div class="card-creative p-4 h-100">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div class="flex-grow-1">
-                                <h5 class="fw-bold mb-2" style="color: var(--text-primary);">
-                                    {{ $advert->title }}
+                                <h5 class="fw-bold mb-2 advert-card-title" style="color: var(--text-primary);" title="{{ $advert->title }}">
+                                    {{ Str::limit($advert->title, 72) }}
                                 </h5>
                                 <div>
                                     @php
@@ -87,8 +87,8 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="mb-3" style="color: var(--text-secondary); line-height: 1.6;">
-                            {{ Str::limit($advert->content, 150) }}
+                        <p class="mb-3 advert-card-desc" style="color: var(--text-secondary); line-height: 1.6;">
+                            {{ Str::limit(strip_tags($advert->content), 140) }}
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted" style="color: var(--text-muted);">
@@ -140,6 +140,21 @@
 </section>
 
 <style>
+    .advert-card-title {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-word;
+    }
+    .advert-card-desc {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        word-break: break-word;
+    }
+
     /* Аккуратные кнопки действий в таблицах */
     .btn-action-edit {
         background: rgba(4, 120, 87, 0.1);

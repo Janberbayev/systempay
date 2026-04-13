@@ -59,12 +59,12 @@
                         <a href="{{ route('show-project', $project) }}" style="text-decoration: none;">
                         <div class="card-creative p-4 h-100">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <h5 class="fw-bold mb-0" style="color: var(--text-primary);">
-                                    {{ $project->title }}
+                                <h5 class="fw-bold mb-0 project-card-title" style="color: var(--text-primary);" title="{{ $project->title }}">
+                                    {{ Str::limit($project->title, 72) }}
                                 </h5>
                             </div>
-                            <p class="mb-3" style="color: var(--text-secondary); line-height: 1.6;">
-                                {{ Str::limit($project->description, 150) }}
+                            <p class="mb-3 project-card-desc" style="color: var(--text-secondary); line-height: 1.6;">
+                                {{ Str::limit(strip_tags($project->description), 140) }}
                             </p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <small class="text-muted" style="color: var(--text-muted);">
@@ -118,6 +118,20 @@
     </section>
 
     <style>
+        .project-card-title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
+        .project-card-desc {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+        }
         .pagination {
             --bs-pagination-bg: var(--bg-card);
             --bs-pagination-border-color: var(--border-color);

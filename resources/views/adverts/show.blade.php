@@ -27,7 +27,7 @@
                             <i class="bi bi-arrow-left me-1"></i> Назад
                         </a>
                     </div>
-                    <div class="role-card-creative h-100 p-4 p-md-5 mt-4">
+                    <div class="role-card-creative h-90 p-4 p-md-5 mt-5">
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
                                 <h1 class="fw-black mb-2" style="font-size: 1.8rem; color: var(--text-primary);">
@@ -52,6 +52,11 @@
                                             <i class="bi bi-person me-1"></i>
                                             Автор: {{ $advert->user->name }}
                                         </span>
+
+                                        <span>•</span>
+                                        <span>
+                                            Тел.: {{ $advert->user->phone }}
+                                        </span>
                                     @endif
                                 </div>
                             </div>
@@ -66,38 +71,14 @@
 
                         <hr class="my-4">
 
-                        <div class="mb-4">
-                            <h5 class="fw-bold mb-2" style="color: var(--text-primary);">Описание</h5>
-                            <p style="color: var(--text-secondary); line-height: 1.8; white-space: pre-line;">
+                        <div class="">
+                            <h5 class="mb-2" style="color: var(--text-primary);">Описание</h5>
+                            <p style="color: var(--text-secondary); line-height: 1.8;">
                                 {{ $advert->content }}
                             </p>
                         </div>
 
-                        <div class="row g-3 mb-4">
-                            @if(!empty($advert->budget))
-                                <div class="col-md-4">
-                                    <div class="p-3 rounded-3" style="background: rgba(59,130,246,0.06);">
-                                        <div class="text-muted small mb-1">Бюджет</div>
-                                        <div class="fw-bold" style="color: var(--text-primary);">
-                                            {{ number_format($advert->budget, 0, '.', ' ') }} ₸
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
-                            @if(!empty($advert->deadline))
-                                <div class="col-md-4">
-                                    <div class="p-3 rounded-3" style="background: rgba(16,185,129,0.06);">
-                                        <div class="text-muted small mb-1">Дедлайн</div>
-                                        <div class="fw-bold" style="color: var(--text-primary);">
-                                            {{ \Carbon\Carbon::parse($advert->deadline)->format('d.m.Y') }}
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-
-                        <div class="d-flex justify-content-end align-items-center flex-wrap gap-3 mt-4">
+                        <div class="d-flex justify-content-end align-items-center flex-wrap gap-3 mt-5">
                             @if(auth()->check() && $advert->user_id === auth()->id())
                                 <a href="{{ route('edit-ads', $advert) }}" class="btn btn-creative">
                                     <i class="bi bi-pencil-square me-2"></i>Редактировать объявление

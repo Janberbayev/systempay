@@ -21,7 +21,7 @@
             @endif
 
             <div class="text-center mb-5">
-                <h2 class="display-3 fw-black mb-3">Создание проекта</h2>
+                <h1 class="display-6 fw-black mb-3">Редактирование проекта</h1>
             </div>
             <div class="row g-4">
                 <div class="col-md-6 mx-auto">

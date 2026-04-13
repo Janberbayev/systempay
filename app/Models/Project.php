@@ -100,4 +100,9 @@ class Project extends Model
             'expires_at' => now()->addDays($days),
         ]);
     }
+
+    public function offers()
+    {
+        return $this->hasMany(Offer::class);
+    }
 }

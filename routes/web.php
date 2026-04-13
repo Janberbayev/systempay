@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OfferController;
 
 Route::get('/', function () {
     return view('home');
@@ -78,6 +79,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/{region}', [AdmController::class, 'editRegion'])->name('admin-regions-edit')->middleware('role:admin');
 
     // для user
+    // *project
     Route::get('/dashboard/publish', function () {return view('dashboard'); })->name('publish');
     Route::get('list-project', [ProjectController::class, 'index'])->name('list-project')->middleware('can:view projects');
     Route::get('add-project', [ProjectController::class, 'create'])->name('add-project')->middleware('can:add projects');
@@ -86,7 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::get('edit-project/{project}', [ProjectController::class, 'edit'])->name('edit-project')->middleware('can:edit projects');
     Route::put('update-project/{project}', [ProjectController::class, 'update'])->name('update-project')->middleware('can:edit projects');
     Route::delete('delete-project/{project}', [ProjectController::class, 'destroy'])->name('delete-project')->middleware('can:delete projects');
-
+    // *adverts
     Route::get('list-ads', [AdvertController::class, 'index'])->name('list-ads')->middleware('can:view ads');
     Route::get('add-ads', [AdvertController::class, 'create'])->name('add-ads')->middleware('can:add ads');
     Route::post('store-ads', [AdvertController::class, 'store'])->name('store-ads')->middleware('can:add ads');
@@ -99,6 +101,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
 
+    // *offer from user to project
+    Route::post('give-offer', [OfferController::class, 'store'])->name('offer-to-project')->middleware('can:add ads');
 });
 
 // API для получения городов по области

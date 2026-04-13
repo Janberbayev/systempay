@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Offer;
 use App\Models\Project;
 use App\Models\Region;
 use Illuminate\Http\Request;
@@ -70,7 +71,10 @@ class ProjectController extends Controller
 
     public function show(Project $project)
     {
-        return view('projects.show', compact('project'));
+        $hasOffer = Offer::where('project_id', $project->id)
+            ->where('user_id', auth()->id())
+            ->exists();
+        return view('projects.show', compact('project', 'hasOffer'));
     }
 
     public function edit(Project $project)
