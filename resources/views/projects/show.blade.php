@@ -135,7 +135,7 @@
                                                         <div>
                                                             <div class="small" style="color: var(--text-muted);">Сумма</div>
                                                             <div class="fw-semibold" style="color: var(--text-primary);">
-                                                                {{ number_format((float) $project->offer->price, 0, '.', ' ') }} <span class="fw-normal" style="color: var(--text-secondary);">₸</span>
+                                                                {{ number_format((float) $project->offers->price, 0, '.', ' ') }} <span class="fw-normal" style="color: var(--text-secondary);">₸</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -146,7 +146,7 @@
                                                         <div>
                                                             <div class="small" style="color: var(--text-muted);">Срок</div>
                                                             <div class="fw-semibold" style="color: var(--text-primary);">
-                                                                {{ $project->offer->duration }} дн.
+                                                                {{ $project->offers->duration }} дн.
                                                             </div>
                                                         </div>
                                                     </div>
@@ -157,7 +157,7 @@
                                                         <div class="flex-grow-1">
                                                             <div class="small" style="color: var(--text-muted);">Комментарий</div>
                                                             <div style="color: var(--text-secondary); line-height: 1.6;">
-                                                                {{ $project->offer->comments ? $offer->comments : '—' }}
+                                                                {{ $project->offers->comments ? $project->offers->comments : '—' }}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -165,7 +165,7 @@
                                                 <div class="col-12 pt-3 mt-1" style="border-top: 1px solid var(--border-color);">
                                                     <div class="d-flex align-items-center gap-2 small" style="color: var(--text-secondary);">
                                                         <i class="bi bi-clock-history" style="color: var(--text-muted);"></i>
-                                                        <span>Отправлено {{ $project->offer->created_at->format('d.m.Y') }} в {{ $project->offer->created_at->format('H:i') }}</span>
+                                                        <span>Отправлено {{ $project->offers->created_at->format('d.m.Y') }} в {{ $project->offers->created_at->format('H:i') }}</span>
                                                     </div>
                                                 </div>
                                             </div>
