@@ -119,7 +119,6 @@
                                     </form>
                                 </div>
                             @else
-                                @php($offer = $project->offers()->where('user_id', auth()->id())->first())
                                 <div class="mt-3">
                                     <span class="badge bg-secondary mb-3 d-inline-block">
                                         ✔ Вы уже отправили предложение
