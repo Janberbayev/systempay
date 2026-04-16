@@ -1,15 +1,16 @@
 <?php
 
-use App\Http\Controllers\MessageController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RoleController;
 use App\Http\Controllers\AdmController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\AdvertController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DealController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('home');
@@ -48,7 +49,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-//    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    //    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // для admin
     Route::get('/admin/page', [AdmController::class, 'index'])->name('admin.page')->middleware('role:admin');
@@ -80,11 +81,14 @@ Route::middleware('auth')->group(function () {
 
     // для user
     // *project
-    Route::get('/dashboard/publish', function () {return view('dashboard'); })->name('publish');
+    Route::get('/dashboard/publish', function () {
+        return view('dashboard');
+    })->name('publish');
     Route::get('list-project', [ProjectController::class, 'index'])->name('list-project')->middleware('can:view projects');
     Route::get('add-project', [ProjectController::class, 'create'])->name('add-project')->middleware('can:add projects');
     Route::post('store-project', [ProjectController::class, 'store'])->name('store-project')->middleware('can:add projects');
     Route::get('show-project/{project}', [ProjectController::class, 'show'])->name('show-project')->middleware('can:view projects');
+    Route::post('show-project/{project}/deals', [DealController::class, 'store'])->name('deals.store')->middleware('can:view projects');
     Route::get('edit-project/{project}', [ProjectController::class, 'edit'])->name('edit-project')->middleware('can:edit projects');
     Route::put('update-project/{project}', [ProjectController::class, 'update'])->name('update-project')->middleware('can:edit projects');
     Route::delete('delete-project/{project}', [ProjectController::class, 'destroy'])->name('delete-project')->middleware('can:delete projects');
@@ -103,6 +107,8 @@ Route::middleware('auth')->group(function () {
 
     // *offer from user to project
     Route::post('give-offer', [OfferController::class, 'store'])->name('offer-to-project')->middleware('can:add ads');
+
+    //Deal
 });
 
 // API для получения городов по области

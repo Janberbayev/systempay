@@ -20,53 +20,55 @@
                 </div>
             @endif
 
+            @php
+                $advertBackFrom = request('from');
+                $advertBackTab = request('tab', 'on-site');
+                $dashboardTabs = ['on-site', 'pending', 'archive'];
+                if (! in_array($advertBackTab, $dashboardTabs, true)) {
+                    $advertBackTab = 'on-site';
+                }
+                $advertBackHref = $advertBackFrom === 'dashboard'
+                    ? route('dashboard', ['tab' => $advertBackTab])
+                    : route('list-ads');
+            @endphp
             <div class="row g-4">
                 <div class="col-lg-8 mx-auto">
                     <div class="mb-3">
-                        <a href="{{ route('list-ads') }}" class="text-decoration-none" style="color: var(--text-muted); font-weight: 500;">
+                        <a href="{{ $advertBackHref }}" class="text-decoration-none" style="color: var(--text-muted); font-weight: 500;">
                             <i class="bi bi-arrow-left me-1"></i> Назад
                         </a>
                     </div>
                     <div class="role-card-creative h-90 p-4 p-md-5 mt-5">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div>
-                                <h1 class="fw-black mb-2" style="font-size: 1.8rem; color: var(--text-primary);">
-                                    {{ $advert->title }}
-                                </h1>
-                                <div class="d-flex flex-wrap align-items-center gap-2 text-muted small">
-                                    <span>
-                                        <i class="bi bi-geo-alt me-1"></i>
-                                        {{ $advert->region->name ?? 'Регион не указан' }}
-                                        @if($advert->city)
-                                            · {{ $advert->city->name }}
-                                        @endif
-                                    </span>
+                        <div class="mb-3">
+                            <h1 class="fw-black mb-2" style="font-size: 1.8rem; color: var(--text-primary);">
+                                {{ $advert->title }}
+                            </h1>
+                            <div class="d-flex flex-wrap align-items-center gap-2 text-muted small">
+                                <span>
+                                    <i class="bi bi-geo-alt me-1"></i>
+                                    {{ $advert->region->name ?? 'Регион не указан' }}
+                                    @if($advert->city)
+                                        · {{ $advert->city->name }}
+                                    @endif
+                                </span>
+                                <span>•</span>
+                                <span>
+                                    <i class="bi bi-calendar me-1"></i>
+                                    {{ $advert->created_at->format('d.m.Y') }}
+                                </span>
+                                @if($advert->user)
                                     <span>•</span>
                                     <span>
-                                        <i class="bi bi-calendar me-1"></i>
-                                        {{ $advert->created_at->format('d.m.Y') }}
+                                        <i class="bi bi-person me-1"></i>
+                                        Автор: {{ $advert->user->name }}
                                     </span>
-                                    @if($advert->user)
-                                        <span>•</span>
-                                        <span>
-                                            <i class="bi bi-person me-1"></i>
-                                            Автор: {{ $advert->user->name }}
-                                        </span>
 
-                                        <span>•</span>
-                                        <span>
-                                            Тел.: {{ $advert->user->phone }}
-                                        </span>
-                                    @endif
-                                </div>
+                                    <span>•</span>
+                                    <span>
+                                        Тел.: {{ $advert->user->phone }}
+                                    </span>
+                                @endif
                             </div>
-
-                            @if(method_exists($advert, 'statusLabel'))
-                                @php($status = $advert->statusLabel())
-                                <span class="badge bg-{{ $status['color'] ?? 'secondary' }} px-3 py-2">
-                                    {!! $status['icon'] ?? '' !!} {{ $status['label'] ?? '' }}
-                                </span>
-                            @endif
                         </div>
 
                         <hr class="my-4">

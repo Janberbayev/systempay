@@ -13,21 +13,24 @@ class Project extends Model
         'user_id',
         'title',
         'description',
-//        'is_approved',
+        //        'is_approved',
         'moderation_status',
         'expires_at',
         'admin_comment',
         'region_id',
         'city_id',
-        ];
+    ];
 
     protected $casts = [
         'expires_at' => 'datetime',
     ];
 
-    public const MOD_PROJECT_PENDING  = 'pending';
+    public const MOD_PROJECT_PENDING = 'pending';
+
     public const MOD_PROJECT_APPROVED = 'approved';
+
     public const MOD_PROJECT_REJECTED = 'rejected';
+
     public const MOD_PROJECT_REVISION = 'revision';
 
     public static function statuses(): array
@@ -48,7 +51,7 @@ class Project extends Model
     public function statusLabel(): array
     {
         return match ($this->moderation_status) {
-            self::MOD_PROJECT_PENDING  => ['На проверке', 'secondary'],
+            self::MOD_PROJECT_PENDING => ['На проверке', 'secondary'],
             self::MOD_PROJECT_APPROVED => ['Одобрен', 'success'],
             self::MOD_PROJECT_REJECTED => ['Отклонён', 'danger'],
             self::MOD_PROJECT_REVISION => ['На доработку', 'warning'],
@@ -73,7 +76,7 @@ class Project extends Model
             return 'inactive';
         }
 
-        if (!$this->expires_at) {
+        if (! $this->expires_at) {
             return 'inactive';
         }
 
@@ -104,5 +107,10 @@ class Project extends Model
     public function offers()
     {
         return $this->hasMany(Offer::class);
+    }
+
+    public function deal()
+    {
+        return $this->hasOne(Deal::class);
     }
 }

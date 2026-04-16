@@ -215,8 +215,8 @@
                                 <td style="padding: 4px 8px; font-size: 0.80rem;">{{ $adver->expires_at ? $adver->expires_at->format('d.m.Y H:i') : '—' }}</td>
                                 <td style="padding: 4px 8px; font-size: 0.85rem;">
                                     <div style="font-size: 0.8rem;">
-                                        <strong>{{ $adver->user->name }}</strong><br>
-{{--                                        <span class="text-muted" style="font-size: 0.75rem;">{{ $adver->user->email }}</span><br>--}}
+                                        <span>{{ $adver->user->name }}</span><br>
+                                        <span class="text-muted" style="font-size: 0.75rem;">{{ $adver->user->email }}</span><br>
                                         <span class="text-muted" style="font-size: 0.75rem;">{{ $adver->user->phone }}</span>
                                     </div>
                                 </td>

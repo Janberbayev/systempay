@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Advert;
-use App\Models\Project;
+use App\Models\Deal;
 use App\Models\Order;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -39,6 +40,7 @@ class DashboardController extends Controller
 
         $allProjects = Project::where('user_id', $user->id)
             ->with(['region', 'city'])
+            ->withCount('offers')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -48,7 +50,7 @@ class DashboardController extends Controller
             'pending' => 'pending',
         ];
 
-        if (!array_key_exists($activeTab, $statusMap)) {
+        if (! array_key_exists($activeTab, $statusMap)) {
             $activeTab = 'on-site';
         }
 
@@ -89,15 +91,10 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        // Получаем сделки пользователя (заказы)
-        // Пока используем модель Order, в будущем можно расширить
-        $deals = Order::where('user_id', $user->id)
+        $deals = Deal::where('client_id', $user->id)
+            ->orWhere('contractor_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
-
-        // Если нет связи user_id в Order, получаем пустой массив
-        // В будущем можно добавить связи с проектами/объявлениями
-        $deals = collect([]);
 
         return view('dashboard.my-deals', compact('deals'));
     }
@@ -125,9 +122,9 @@ class DashboardController extends Controller
         return view('dashboard.messages', compact('advertsWithComments', 'projectsWithComments'));
     }
 
-//    public function myAds()
-//    {
-//        $user = Auth::user();
-//        $adverts = Advert::$user = A
-//    }
+    //    public function myAds()
+    //    {
+    //        $user = Auth::user();
+    //        $adverts = Advert::$user = A
+    //    }
 }

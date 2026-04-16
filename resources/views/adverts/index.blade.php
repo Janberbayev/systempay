@@ -61,31 +61,12 @@
         <div class="row g-4">
             @forelse($adverts as $advert)
                 <div class="col-md-6 col-lg-4">
-                    <a href="{{ route('show-ads', $advert) }}" style="text-decoration: none;">
+                    <a href="{{ route('show-ads', $advert) }}?{{ http_build_query(['from' => 'list']) }}" style="text-decoration: none;">
                     <div class="card-creative p-4 h-100">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <div class="flex-grow-1">
-                                <h5 class="fw-bold mb-2 advert-card-title" style="color: var(--text-primary);" title="{{ $advert->title }}">
-                                    {{ Str::limit($advert->title, 72) }}
-                                </h5>
-                                <div>
-                                    @php
-                                        [$label, $color] = $advert->statusLabel();
-                                    @endphp
-                                    <span class="badge bg-{{ $color }}" style="font-size: 0.75rem; padding: 4px 8px;">
-                                        @if($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_APPROVED)
-                                            <i class="bi bi-check-circle me-1"></i>
-                                        @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REJECTED)
-                                            <i class="bi bi-x-circle me-1"></i>
-                                        @elseif($advert->moderation_status === \App\Models\Advert::MOD_ADVERT_REVISION)
-                                            <i class="bi bi-arrow-repeat me-1"></i>
-                                        @else
-                                            <i class="bi bi-clock-history me-1"></i>
-                                        @endif
-                                        {{ $label }}
-                                    </span>
-                                </div>
-                            </div>
+                        <div class="mb-3">
+                            <h5 class="fw-bold advert-card-title" style="color: var(--text-primary);" title="{{ $advert->title }}">
+                                {{ Str::limit($advert->title, 72) }}
+                            </h5>
                         </div>
                         <p class="mb-3 advert-card-desc" style="color: var(--text-secondary); line-height: 1.6;">
                             {{ Str::limit(strip_tags($advert->content), 140) }}

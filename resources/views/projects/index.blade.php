@@ -56,7 +56,7 @@
             <div class="row g-4">
                 @forelse($projects as $project)
                     <div class="col-md-6 col-lg-4">
-                        <a href="{{ route('show-project', $project) }}" style="text-decoration: none;">
+                        <a href="{{ route('show-project', $project) }}?{{ http_build_query(['from' => 'list']) }}" style="text-decoration: none;">
                         <div class="card-creative p-4 h-100">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <h5 class="fw-bold mb-0 project-card-title" style="color: var(--text-primary);" title="{{ $project->title }}">

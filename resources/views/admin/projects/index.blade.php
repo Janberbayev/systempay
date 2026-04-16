@@ -214,7 +214,7 @@
                                 <td style="padding: 4px 8px; font-size: 0.85rem;">{{ $project->expires_at ? $project->expires_at->format('d.m.Y H:i') : '—' }}</td>
                                 <td style="padding: 4px 8px; font-size: 0.85rem;">
                                     <div style="font-size: 0.8rem;">
-                                        <strong>{{ $project->user->name }}</strong><br>
+                                        <span>{{ $project->user->name }}</span><br>
                                         <span class="text-muted" style="font-size: 0.75rem;">{{ $project->user->email }}</span><br>
                                         <span class="text-muted" style="font-size: 0.75rem;">{{ $project->user->phone }}</span>
                                     </div>

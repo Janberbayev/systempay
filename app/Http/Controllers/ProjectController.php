@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-
     public function index(Request $request)
     {
         $query = Project::query()
@@ -19,37 +18,39 @@ class ProjectController extends Controller
 
         // Поиск
         if ($request->has('search') && $request->search) {
-            $query->where(function($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->search . '%')
-                    ->orWhere('description', 'like', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->where('title', 'like', '%'.$request->search.'%')
+                    ->orWhere('description', 'like', '%'.$request->search.'%');
             });
         }
 
         $projects = $query->latest()->paginate(12);
+
         return view('projects.index', compact('projects'));
     }
 
     public function create()
     {
         $regions = Region::orderBy('name')->get();
+
         return view('projects.add-new-project', compact('regions'));
     }
 
     public function store(Request $request)
     {
-//        вариант 1
-//        Project::create($request->all());
+        //        вариант 1
+        //        Project::create($request->all());
 
-//        вариант 2
-//        $data = $request->validate([
-////            'user_id' => 'exists:users,id',
-//            'title' => 'required|string|max:255',
-//            'description' => 'required|string',
-//        ]);
-//        $request->user()->projects()->create($data);
+        //        вариант 2
+        //        $data = $request->validate([
+        // //            'user_id' => 'exists:users,id',
+        //            'title' => 'required|string|max:255',
+        //            'description' => 'required|string',
+        //        ]);
+        //        $request->user()->projects()->create($data);
 
         $request->validate([
-//            'user_id' => 'exists:users,id',
+            //            'user_id' => 'exists:users,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'region_id' => 'nullable|exists:regions,id',
@@ -79,7 +80,13 @@ class ProjectController extends Controller
             ->where('user_id', auth()->id())
             ->first();
 
-        return view('projects.show', compact('project', 'hasOffer', 'offer'));
+        $offers = collect();
+        if (auth()->check() && (int) $project->user_id === (int) auth()->id()) {
+            $project->loadMissing('deal');
+            $offers = $project->offers()->with('user')->latest()->get();
+        }
+
+        return view('projects.show', compact('project', 'hasOffer', 'offer', 'offers'));
     }
 
     public function edit(Project $project)
@@ -106,6 +113,4 @@ class ProjectController extends Controller
 
         return back()->with('success', 'Исправлено и отправлено на повторную проверку');
     }
-
-
 }

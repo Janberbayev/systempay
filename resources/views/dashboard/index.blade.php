@@ -42,7 +42,11 @@
 
                                 <!-- Объявления -->
                                 @foreach($adverts as $advert)
-                                    <div class="dashboard-item mb-3 p-3" style="border: 1px solid var(--border-color); border-radius: 12px;">
+                                    @if($activeTab === 'on-site')
+                                        <a href="{{ route('show-ads', $advert) }}?{{ http_build_query(['from' => 'dashboard', 'tab' => $activeTab]) }}" class="dashboard-item dashboard-item--link mb-3 p-3 d-block text-decoration-none" style="border: 1px solid var(--border-color); border-radius: 12px; color: inherit;">
+                                    @else
+                                        <div class="dashboard-item mb-3 p-3" style="border: 1px solid var(--border-color); border-radius: 12px;">
+                                    @endif
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div class="flex-grow-1">
                                                 <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $advert->title }}</h5>
@@ -50,11 +54,17 @@
                                                 <span class="badge {{ $advert->moderation_status === 'approved' ? 'bg-success' : ($advert->moderation_status === 'rejected' ? 'bg-danger' : ($advert->moderation_status === 'revision' ? 'bg-warning text-dark' : 'bg-secondary')) }}">
                                                 {{ $advert->statusLabel()[0] }}
                                             </span>
-                                                @if($activeTab === 'on-site')
-                                                    <p class="dashboard-item-edit mb-0 mt-2">
-                                                        <a href="{{ route('edit-ads', $advert) }}" class="dashboard-edit-link"><i class="bi bi-pencil-square me-1"></i>Редактировать</a>
-                                                    </p>
-                                                @endif
+{{--                                                @if($activeTab === 'on-site')--}}
+{{--                                                    <p class="dashboard-item-edit mb-0 mt-2">--}}
+{{--                                                        <span--}}
+{{--                                                            role="link"--}}
+{{--                                                            tabindex="0"--}}
+{{--                                                            class="dashboard-edit-link dashboard-card-nested-action"--}}
+{{--                                                            onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('edit-ads', $advert) }}'"--}}
+{{--                                                            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('edit-ads', $advert) }}'}"--}}
+{{--                                                        ><i class="bi bi-pencil-square me-1"></i>Редактировать</span>--}}
+{{--                                                    </p>--}}
+{{--                                                @endif--}}
                                                 @if($activeTab === 'on-site' && $label = $advert->remainingActivePublicationLabel())
                                                     <div class="text-muted mt-2 mb-0" style="font-size: 0.85rem;">{{ $label }}</div>
                                                 @endif
@@ -72,17 +82,35 @@
                                                 </div>
                                             </div>
                                             <div class="mt-3">
-                                                <a href="{{ route('edit-ads', $advert) }}" class="btn btn-creative btn-sm">
-                                                    <i class="bi bi-eye me-1"></i>Посмотреть объявление и внести изменения
-                                                </a>
+                                                @if($activeTab === 'on-site')
+                                                    <span
+                                                        role="link"
+                                                        tabindex="0"
+                                                        class="btn btn-creative btn-sm dashboard-card-nested-action d-inline-flex align-items-center"
+                                                        onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('edit-ads', $advert) }}'"
+                                                        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('edit-ads', $advert) }}'}"
+                                                    ><i class="bi bi-eye me-1"></i>Посмотреть объявление и внести изменения</span>
+                                                @else
+                                                    <a href="{{ route('edit-ads', $advert) }}" class="btn btn-creative btn-sm">
+                                                        <i class="bi bi-eye me-1"></i>Посмотреть объявление и внести изменения
+                                                    </a>
+                                                @endif
                                             </div>
                                         @endif
-                                    </div>
+                                    @if($activeTab === 'on-site')
+                                        </a>
+                                    @else
+                                        </div>
+                                    @endif
                                 @endforeach
 
                             <!-- Проекты -->
                                 @foreach($projects as $project)
-                                    <div class="dashboard-item mb-3 p-3" style="border: 1px solid var(--border-color); border-radius: 12px;">
+                                    @if($activeTab === 'on-site')
+                                        <a href="{{ route('show-project', $project) }}?{{ http_build_query(['from' => 'dashboard', 'tab' => $activeTab]) }}" class="dashboard-item dashboard-item--link mb-3 p-3 d-block text-decoration-none" style="border: 1px solid var(--border-color); border-radius: 12px; color: inherit;">
+                                    @else
+                                        <div class="dashboard-item mb-3 p-3" style="border: 1px solid var(--border-color); border-radius: 12px;">
+                                    @endif
                                         <div class="d-flex justify-content-between align-items-start">
                                             <div class="flex-grow-1">
                                                 <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $project->title }}</h5>
@@ -90,13 +118,32 @@
                                                 <span class="badge {{ $project->moderation_status === 'approved' ? 'bg-success' : ($project->moderation_status === 'rejected' ? 'bg-danger' : ($project->moderation_status === 'revision' ? 'bg-warning text-dark' : 'bg-secondary')) }}">
                                                 {{ $project->statusLabel()[0] }}
                                             </span>
-                                                @if($activeTab === 'on-site')
-                                                    <p class="dashboard-item-edit mb-0 mt-2">
-                                                        <a href="{{ route('edit-project', $project) }}" class="dashboard-edit-link"><i class="bi bi-pencil-square me-1"></i>Редактировать</a>
-                                                    </p>
-                                                @endif
+{{--                                                @if($activeTab === 'on-site')--}}
+{{--                                                    <p class="dashboard-item-edit mb-0 mt-2">--}}
+{{--                                                        <span--}}
+{{--                                                            role="link"--}}
+{{--                                                            tabindex="0"--}}
+{{--                                                            class="dashboard-edit-link dashboard-card-nested-action"--}}
+{{--                                                            onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('edit-project', $project) }}'"--}}
+{{--                                                            onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault(); event.stopPropagation(); window.location.href='{{ route('edit-project', $project) }}'}"--}}
+{{--                                                        ><i class="bi bi-pencil-square me-1"></i>Редактировать</span>--}}
+{{--                                                    </p>--}}
+{{--                                                @endif--}}
                                                 @if($activeTab === 'on-site' && $label = $project->remainingActivePublicationLabel())
                                                     <div class="text-muted mt-2 mb-0" style="font-size: 0.85rem;">{{ $label }}</div>
+                                                @endif
+                                                @if($activeTab === 'on-site')
+                                                    <div class="dashboard-offers-stat mt-3">
+                                                        <div class="d-flex align-items-center gap-3">
+                                                            <div class="dashboard-offers-stat-icon" aria-hidden="true">
+                                                                <i class="bi bi-people-fill"></i>
+                                                            </div>
+                                                            <div class="flex-grow-1 min-w-0">
+                                                                <div class="dashboard-offers-stat-label">Количество предложений от Исполнителей</div>
+                                                            </div>
+                                                            <div class="dashboard-offers-stat-value">{{ $project->offers_count }}</div>
+                                                        </div>
+                                                    </div>
                                                 @endif
                                             </div>
                                             <small class="text-muted">{{ $project->created_at->format('d.m.Y') }}</small>
@@ -112,7 +159,11 @@
                                                 </div>
                                             </div>
                                         @endif
-                                    </div>
+                                    @if($activeTab === 'on-site')
+                                        </a>
+                                    @else
+                                        </div>
+                                    @endif
                                 @endforeach
                             </div>
                         @else
@@ -226,6 +277,67 @@
         .dashboard-edit-link .bi {
             font-size: 1rem;
             opacity: 0.9;
+        }
+
+        a.dashboard-item--link {
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        a.dashboard-item--link:hover {
+            border-color: rgba(16, 163, 127, 0.45) !important;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+        }
+
+        .dashboard-card-nested-action {
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .dashboard-offers-stat {
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(16, 163, 127, 0.1) 0%, rgba(16, 163, 127, 0.03) 100%);
+            border: 1px solid rgba(16, 163, 127, 0.22);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .dashboard-offers-stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: rgba(16, 163, 127, 0.16);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .dashboard-offers-stat-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.02em;
+            line-height: 1.35;
+        }
+
+        .dashboard-offers-stat-value {
+            min-width: 2.5rem;
+            min-height: 2.5rem;
+            padding: 0 10px;
+            border-radius: 12px;
+            background: var(--accent-green);
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.15rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(16, 163, 127, 0.35);
+            flex-shrink: 0;
+            line-height: 1;
         }
 
         /* Message Card Styles */

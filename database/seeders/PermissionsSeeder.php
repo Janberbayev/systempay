@@ -35,6 +35,11 @@ class PermissionsSeeder extends Seeder
             'add projects',
             'edit projects',
             'delete projects',
+
+            'view deals',
+            'add deals',
+            'edit deals',
+            'delete deals',
         ];
 
         foreach ($permissions as $permission) {
@@ -68,6 +73,11 @@ class PermissionsSeeder extends Seeder
             'add projects',
             'edit projects',
             'delete projects',
+
+            'view deals',
+            'add deals',
+            'edit deals',
+            'delete deals',
         ]);
         $user->givePermissionTo([
             'view posts',
@@ -85,6 +95,11 @@ class PermissionsSeeder extends Seeder
             'view projects',
             'add projects',
             'edit projects',
+
+            'view deals',
+            'add deals',
+            'edit deals',
+            'delete deals',
         ]);
     }
 }
