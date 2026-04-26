@@ -38,12 +38,6 @@
                                                 <p class="text-muted mb-2" style="font-size: 0.9rem;">
                                                     Статус: <span class="badge bg-info">{{ $deal->status_text }}</span>
                                                 </p>
-                                                @if(($deal->contract_versions_count ?? 0) > 0)
-                                                    <a href="{{ route('deals.contract-word', $deal) }}" class="btn btn-creative btn-sm d-inline-flex align-items-center gap-2">
-                                                        <i class="bi bi-file-earmark-word"></i>
-                                                        Скачать договор (Word)
-                                                    </a>
-                                                @endif
                                             </div>
                                             <small class="text-muted flex-shrink-0">{{ $deal->created_at->format('d.m.Y') }}</small>
                                         </div>
