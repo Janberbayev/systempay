@@ -88,6 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::get('add-project', [ProjectController::class, 'create'])->name('add-project')->middleware('can:add projects');
     Route::post('store-project', [ProjectController::class, 'store'])->name('store-project')->middleware('can:add projects');
     Route::get('show-project/{project}', [ProjectController::class, 'show'])->name('show-project')->middleware('can:view projects');
+    Route::post('show-project/{project}/offers', [OfferController::class, 'store'])->name('offers.store')->middleware('can:view projects');
     Route::post('show-project/{project}/deals', [DealController::class, 'store'])->name('deals.store')->middleware('can:view projects');
     Route::get('edit-project/{project}', [ProjectController::class, 'edit'])->name('edit-project')->middleware('can:edit projects');
     Route::put('update-project/{project}', [ProjectController::class, 'update'])->name('update-project')->middleware('can:edit projects');
@@ -106,9 +107,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/conversations/{conversation}/messages', [MessageController::class, 'store'])->name('messages.store');
 
     // *offer from user to project
-    Route::post('give-offer', [OfferController::class, 'store'])->name('offer-to-project')->middleware('can:add ads');
+    Route::get('show-deal/{deal}', [DealController::class, 'show'])->name('show-deal')->middleware('can:add deals');
+    Route::get('show-deal/{deal}/dogovor.docx', [DealController::class, 'downloadContractWord'])->name('deals.contract-word');
 
-    //Deal
+    // Deal
 });
 
 // API для получения городов по области

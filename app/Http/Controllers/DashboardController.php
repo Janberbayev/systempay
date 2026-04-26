@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Advert;
 use App\Models\Deal;
-use App\Models\Order;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -91,8 +90,13 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
-        $deals = Deal::where('client_id', $user->id)
-            ->orWhere('contractor_id', $user->id)
+        $deals = Deal::query()
+            ->where(function ($q) use ($user) {
+                $q->where('client_id', $user->id)
+                    ->orWhere('contractor_id', $user->id);
+            })
+            ->with('project')
+            ->withCount('contractVersions')
             ->orderBy('created_at', 'desc')
             ->get();
 

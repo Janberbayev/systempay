@@ -107,9 +107,14 @@
                         @if(auth()->check() && $project->user_id !== auth()->id())
                             @if(!$hasOffer)
                                 <div class="collapse mt-3" id="project-price-offer">
-                                    <form method="POST" action="{{route('offer-to-project')}}">
+                                    <form method="POST" action="{{ route('offers.store', $project) }}">
                                         @csrf
-                                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                        @if(in_array($projectBackFrom, ['dashboard', 'list'], true))
+                                            <input type="hidden" name="from" value="{{ $projectBackFrom }}">
+                                        @endif
+                                        @if($projectBackFrom === 'dashboard')
+                                            <input type="hidden" name="tab" value="{{ $projectBackTab }}">
+                                        @endif
                                         <div class="input-group mb-3">
                                             <input type="number" class="form-control" name="price" placeholder="Введите сумму" min="1">
                                             <span class="input-group-text">Тенге</span>
@@ -277,9 +282,9 @@
                                     <div class="d-flex justify-content-end mt-2">
                                         <button type="submit" class="btn btn-creative" @disabled($dealLocked)>
                                             @if($dealLocked)
-                                                <i class="bi bi-check2-circle me-2"></i>Запросили договор
+                                                <i class="bi bi-check2-circle me-2"></i>Исполнитель выбран и сформирован Договор
                                             @else
-                                                <i class="bi bi-file-earmark-text me-2"></i>Запросить договор
+                                                <i class="bi bi-file-earmark-text me-2"></i>Выбрать Исполнителя и сформировать Договор
                                             @endif
                                         </button>
                                     </div>

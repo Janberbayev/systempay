@@ -9,7 +9,7 @@
                 <i class="bi bi-grid me-2"></i>
                 <span>Объявления и проекты</span>
             </a>
-            <a href="{{ route('my-deal') }}" class="dashboard-nav-item {{ request()->routeIs('my-deal') ? 'active' : '' }}">
+            <a href="{{ route('my-deal') }}" class="dashboard-nav-item {{ request()->routeIs('my-deal', 'show-deal') ? 'active' : '' }}">
                 <i class="bi bi-file-text me-2"></i>
                 <span>Мои сделки</span>
             </a>

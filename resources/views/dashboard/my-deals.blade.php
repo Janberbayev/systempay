@@ -18,15 +18,34 @@
                         @if($deals->count() > 0)
                             <div class="dashboard-items">
                                 @foreach($deals as $deal)
+{{--                                    @php--}}
+{{--                                        $isClient = auth()->id() === $deal->client_id;--}}
+{{--                                        $isContractor = auth()->id() === $deal->contractor_id;--}}
+{{--                                        if ($isClient) {--}}
+{{--                                            $statusText = 'Запросили договор от потенциального Исполнителя';--}}
+{{--                                        } elseif ($isContractor) {--}}
+{{--                                            $statusText = 'Заказчик запросил договор';--}}
+{{--                                        } else {--}}
+{{--                                            $statusText = 'Неизвестный статус';--}}
+{{--                                        }--}}
+{{--                                    @endphp--}}
                                     <div class="dashboard-item mb-3 p-3" style="border: 1px solid var(--border-color); border-radius: 12px;">
-                                        <div class="d-flex justify-content-between align-items-start">
-                                            <div>
-                                                <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $deal->name ?? 'Сделка #' . $deal->id }}</h5>
+                                        <div class="d-flex justify-content-between align-items-start gap-2">
+                                            <div class="min-w-0">
+                                                <a href="{{ route('show-deal', $deal) }}" class="text-decoration-none" style="color: inherit;">
+                                                    <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $deal->project->title ?? 'Сделка #' . $deal->id }}</h5>
+                                                </a>
                                                 <p class="text-muted mb-2" style="font-size: 0.9rem;">
-                                                    Статус: <span class="badge bg-info">Активна</span>
+                                                    Статус: <span class="badge bg-info">{{ $deal->status_text }}</span>
                                                 </p>
+                                                @if(($deal->contract_versions_count ?? 0) > 0)
+                                                    <a href="{{ route('deals.contract-word', $deal) }}" class="btn btn-creative btn-sm d-inline-flex align-items-center gap-2">
+                                                        <i class="bi bi-file-earmark-word"></i>
+                                                        Скачать договор (Word)
+                                                    </a>
+                                                @endif
                                             </div>
-                                            <small class="text-muted">{{ $deal->created_at->format('d.m.Y') }}</small>
+                                            <small class="text-muted flex-shrink-0">{{ $deal->created_at->format('d.m.Y') }}</small>
                                         </div>
                                     </div>
                                 @endforeach
