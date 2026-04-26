@@ -11,7 +11,7 @@ class ContractDocxGenerator
 {
     public function generate(Deal $deal, array $snapshot, int $version): string
     {
-        $phpWord = new PhpWord;
+        $phpWord = new PhpWord();
         $section = $phpWord->addSection();
 
         $h = ['name' => 'Arial', 'size' => 14, 'bold' => true];
