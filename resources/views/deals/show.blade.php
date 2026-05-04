@@ -59,23 +59,41 @@
                                     <p class="deal-show-desc">
                                         {{ \Illuminate\Support\Str::limit(strip_tags($project->description), 280) }}
                                     </p>
-                                    <div class="deal-person deal-person--client">
-                                        <span class="deal-person__label">Заказчик</span>
-                                        <span class="deal-person__name">{{ $deal->client->name ?? '—' }}</span>
-                                        @if($deal->client && $deal->client->phone)
-                                            <a href="tel:{{ preg_replace('/\s+/', '', $deal->client->phone) }}" class="deal-person__contact">
-                                                <i class="bi bi-telephone"></i>{{ $deal->client->phone }}
-                                            </a>
-                                        @endif
-                                    </div>
                                 @else
-                                    <p class="text-muted small mb-0">Карточка проекта недоступна.</p>
+                                    <p class="deal-show-desc mb-2">Карточка проекта недоступна.</p>
                                 @endif
+
+                                <div class="deal-person deal-person--client">
+                                    <span class="deal-person__label">Заказчик</span>
+                                    <span class="deal-person__name">{{ $deal->client->name ?? '—' }}</span>
+                                    <dl class="deal-detail-list mb-0 mt-2">
+                                        <div class="deal-detail-list__row">
+                                            <dt>Телефон</dt>
+                                            <dd>
+                                                @if($deal->client && $deal->client->phone)
+                                                    <a href="tel:{{ preg_replace('/\s+/', '', $deal->client->phone) }}" class="deal-contact-link">{{ $deal->client->phone }}</a>
+                                                @else
+                                                    <span class="deal-detail-empty">не указан</span>
+                                                @endif
+                                            </dd>
+                                        </div>
+                                        <div class="deal-detail-list__row">
+                                            <dt>Эл. почта</dt>
+                                            <dd>
+                                                @if($deal->client && $deal->client->email)
+                                                    <a href="mailto:{{ $deal->client->email }}" class="deal-contact-link text-break">{{ $deal->client->email }}</a>
+                                                @else
+                                                    <span class="deal-detail-empty">не указана</span>
+                                                @endif
+                                            </dd>
+                                        </div>
+                                    </dl>
+                                </div>
                             </div>
 
                             <div class="col-lg-5">
                                 <div class="deal-show-aside">
-                                    <h2 class="deal-show-h2">Условия</h2>
+                                    <h2 class="deal-show-h2">Предложение от Исполнителя</h2>
                                     <div class="deal-terms-row">
                                         <div class="deal-term">
                                             <span class="deal-term__label">Сумма</span>
@@ -95,21 +113,39 @@
 
                                     @if($deal->offer && $deal->offer->comments)
                                         <div class="deal-offer-block">
-                                            <h3 class="deal-show-h3">Комментарий к предложению</h3>
+                                            <h3 class="deal-show-h3 mb-2">Комментарий</h3>
                                             <div class="deal-offer-comment-scroll">
                                                 <p class="deal-show-note mb-0">{{ $deal->offer->comments }}</p>
                                             </div>
-                                            <div class="deal-person deal-person--contractor mt-3">
-                                                <span class="deal-person__label">Исполнитель</span>
-                                                <span class="deal-person__name">{{ $deal->contractor->name ?? '—' }}</span>
-                                                @if($deal->contractor && $deal->contractor->phone)
-                                                    <a href="tel:{{ preg_replace('/\s+/', '', $deal->contractor->phone) }}" class="deal-person__contact">
-                                                        <i class="bi bi-telephone"></i>{{ $deal->contractor->phone }}
-                                                    </a>
-                                                @endif
-                                            </div>
                                         </div>
                                     @endif
+
+                                    <div class="deal-person deal-person--contractor mt-3">
+                                        <span class="deal-person__label">Исполнитель</span>
+                                        <span class="deal-person__name">{{ $deal->contractor->name ?? '—' }}</span>
+                                        <dl class="deal-detail-list mb-0 mt-2">
+                                            <div class="deal-detail-list__row">
+                                                <dt>Телефон</dt>
+                                                <dd>
+                                                    @if($deal->contractor && $deal->contractor->phone)
+                                                        <a href="tel:{{ preg_replace('/\s+/', '', $deal->contractor->phone) }}" class="deal-contact-link">{{ $deal->contractor->phone }}</a>
+                                                    @else
+                                                        <span class="deal-detail-empty">не указан</span>
+                                                    @endif
+                                                </dd>
+                                            </div>
+                                            <div class="deal-detail-list__row">
+                                                <dt>Эл. почта</dt>
+                                                <dd>
+                                                    @if($deal->contractor && $deal->contractor->email)
+                                                        <a href="mailto:{{ $deal->contractor->email }}" class="deal-contact-link text-break">{{ $deal->contractor->email }}</a>
+                                                    @else
+                                                        <span class="deal-detail-empty">не указана</span>
+                                                    @endif
+                                                </dd>
+                                            </div>
+                                        </dl>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -302,6 +338,44 @@
         }
         .deal-person__contact:hover {
             color: var(--accent-green);
+        }
+        .deal-detail-list {
+            margin: 0;
+        }
+        .deal-detail-list__row {
+            display: grid;
+            grid-template-columns: 5.25rem minmax(0, 1fr);
+            gap: 0.15rem 0.75rem;
+            align-items: baseline;
+            font-size: 0.8125rem;
+            line-height: 1.45;
+            margin-top: 0.35rem;
+        }
+        .deal-detail-list__row:first-child {
+            margin-top: 0;
+        }
+        .deal-detail-list__row dt {
+            margin: 0;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .deal-detail-list__row dd {
+            margin: 0;
+            color: var(--text-secondary);
+        }
+        .deal-contact-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+        .deal-contact-link:hover {
+            color: var(--accent-green);
+            border-bottom-color: rgba(16, 163, 127, 0.35);
+        }
+        .deal-detail-empty {
+            color: var(--text-muted);
+            font-style: italic;
         }
         .deal-show-aside {
             height: 100%;
