@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        if (! Schema::hasTable('contract_versions')) {
+            return;
+        }
+
+        Schema::table('contract_versions', function (Blueprint $table) {
+            if (! Schema::hasColumn('contract_versions', 'sent_to_contractor_at')) {
+                $table->timestamp('sent_to_contractor_at')->nullable();
+            }
+        });
+    }
+
+    public function down(): void
+    {
+        if (! Schema::hasTable('contract_versions')) {
+            return;
+        }
+
+        Schema::table('contract_versions', function (Blueprint $table) {
+            if (Schema::hasColumn('contract_versions', 'sent_to_contractor_at')) {
+                $table->dropColumn('sent_to_contractor_at');
+            }
+        });
+    }
+};
