@@ -13,10 +13,12 @@ class ContractVersion extends Model
         'file_path',
         'hash',
         'status',
+        'sent_to_contractor_at',
     ];
 
     protected $casts = [
         'snapshot' => 'array',
+        'sent_to_contractor_at' => 'datetime',
     ];
 
     public function deal()

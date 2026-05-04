@@ -75,9 +75,18 @@
 
             // Проверяем путь для маршрутов (например, list-project)
             if (pathname.includes('list-project')) {
-                const listProjectLink = document.querySelector('a[href*="list-project"]');
+                const listProjectLink = document.querySelector('.navbar a[href*="list-project"]');
                 if (listProjectLink) {
                     listProjectLink.classList.add('active');
+                    return;
+                }
+            }
+
+            // Публичный раздел объявлений (список, карточка, добавление / редактирование)
+            if (pathname.includes('list-ads') || pathname.includes('show-ads') || pathname.includes('add-ads') || pathname.includes('edit-ads')) {
+                const listAdsLink = document.querySelector('.navbar a[href*="list-ads"]');
+                if (listAdsLink) {
+                    listAdsLink.classList.add('active');
                     return;
                 }
             }

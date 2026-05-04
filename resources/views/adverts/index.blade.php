@@ -28,29 +28,97 @@
             </div>
         </div>
 
-        <!-- Search and Filters -->
+        <!-- Фильтры (как list-project / admin: область, город, поиск) -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card-creative p-4">
-                    <form method="GET" action="{{ route('list-ads') }}" class="row g-3">
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <span class="input-group-text" style="background: var(--bg-card); border-color: var(--border-color); color: var(--text-secondary);">
-                                    <i class="bi bi-search"></i>
-                                </span>
+                <div class="card-creative p-3 mb-3" style="background: var(--bg-card-hover); border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);">
+                    <form method="GET" action="{{ route('list-ads') }}" id="advertListFilters">
+                        @if($errors->any())
+                            <div class="row g-2 mb-2">
+                                <div class="col-12">
+                                    <div class="alert alert-danger mb-0 py-2 px-3" style="border-radius: 8px; font-size: 0.875rem;" role="alert">
+                                        {{ $errors->first() }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-5">
+                                <label for="search_ads" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
+                                    <i class="bi bi-search me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Поиск
+                                </label>
                                 <input
                                     type="text"
-                                    class="form-control"
+                                    class="form-control form-control-sm"
+                                    id="search_ads"
                                     name="search"
-                                    placeholder="Поиск по названию или тексту объявления..."
                                     value="{{ request('search') }}"
+                                    placeholder="По названию или содержанию..."
+                                    style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
+                                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
+                                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
                                 >
                             </div>
+                            <div class="col-md-3">
+                                <label for="filter_region_ads" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
+                                    <i class="bi bi-geo-alt me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Область
+                                </label>
+                                <select
+                                    class="form-select form-select-sm"
+                                    id="filter_region_ads"
+                                    name="region_id"
+                                    style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
+                                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
+                                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
+                                    onchange="document.getElementById('filter_city_ads').value=''; this.form.submit();"
+                                >
+                                    <option value="">Все области</option>
+                                    @foreach($regions as $region)
+                                        <option value="{{ $region->id }}" {{ request('region_id') == $region->id ? 'selected' : '' }}>
+                                            {{ $region->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="filter_city_ads" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
+                                    <i class="bi bi-geo me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Город
+                                </label>
+                                <select
+                                    class="form-select form-select-sm"
+                                    id="filter_city_ads"
+                                    name="city_id"
+                                    style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
+                                    {{ !request('region_id') ? 'disabled' : '' }}
+                                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
+                                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
+                                >
+                                    <option value="">Все города</option>
+                                    @if(request('region_id'))
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}" {{ request('city_id') == $city->id ? 'selected' : '' }}>
+                                                {{ $city->name }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-creative w-100" style="padding: 0.375rem 0.75rem; height: calc(1.5em + 0.75rem + 2px);">
-                                <i class="bi bi-search me-2"></i>Найти
-                            </button>
+
+                        <div class="row mt-2">
+                            <div class="col-12">
+                                <div class="d-flex gap-3 align-items-center flex-wrap justify-content-end" style="padding-top: 8px; border-top: 1px solid var(--border-color);">
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-sm btn-creative px-3 py-1" style="border-radius: 8px; font-weight: 600; font-size: 0.875rem;">
+                                            <i class="bi bi-funnel-fill me-1"></i>Применить
+                                        </button>
+                                        <a href="{{ route('list-ads') }}" class="btn btn-sm btn-outline-secondary px-3 py-1" style="border-radius: 8px; font-weight: 600; font-size: 0.875rem;">
+                                            <i class="bi bi-x-circle me-1"></i>Сбросить
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -77,7 +145,7 @@
                                 {{ $advert->created_at->format('d.m.Y') }}
                             </small>
                             <span class="btn btn-creative-accent btn-sm" style="border-radius: 30px; background: #fb923c !important; border: none !important; color: #000 !important;">
-                                {{ $advert->city->name }}
+                                {{ $advert->city?->name ?? 'Не указано' }}
                             </span>
                         </div>
                     </div>
@@ -91,12 +159,17 @@
                         </div>
                         <h3 class="fw-bold mb-3" style="color: var(--text-primary);">Объявлений не найдено</h3>
                         <p class="mb-4" style="color: var(--text-secondary);">
-                            @if(request('search'))
-                                По запросу "{{ request('search') }}" ничего не найдено
+                            @if(request()->hasAny(['search', 'region_id', 'city_id']))
+                                Нет объявлений по выбранным фильтрам
                             @else
                                 Пока нет объявлений. Создайте первое объявление!
                             @endif
                         </p>
+                        @if(request()->hasAny(['search', 'region_id', 'city_id']))
+                            <a href="{{ route('list-ads') }}" class="btn btn-outline-secondary me-2 rounded-3">
+                                Сбросить фильтры
+                            </a>
+                        @endif
                         @can('add ads')
                             <a href="{{ route('add-ads') }}" class="btn btn-creative">
                                 <i class="bi bi-plus-circle me-2"></i>Создать объявление

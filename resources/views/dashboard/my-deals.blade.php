@@ -18,29 +18,18 @@
                         @if($deals->count() > 0)
                             <div class="dashboard-items">
                                 @foreach($deals as $deal)
-{{--                                    @php--}}
-{{--                                        $isClient = auth()->id() === $deal->client_id;--}}
-{{--                                        $isContractor = auth()->id() === $deal->contractor_id;--}}
-{{--                                        if ($isClient) {--}}
-{{--                                            $statusText = 'Запросили договор от потенциального Исполнителя';--}}
-{{--                                        } elseif ($isContractor) {--}}
-{{--                                            $statusText = 'Заказчик запросил договор';--}}
-{{--                                        } else {--}}
-{{--                                            $statusText = 'Неизвестный статус';--}}
-{{--                                        }--}}
-{{--                                    @endphp--}}
                                     <div class="dashboard-item mb-3 p-3" style="border: 1px solid var(--border-color); border-radius: 12px;">
-                                        <div class="d-flex justify-content-between align-items-start gap-2">
-                                            <div class="min-w-0">
-                                                <a href="{{ route('show-deal', $deal) }}" class="text-decoration-none" style="color: inherit;">
-                                                    <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $deal->project->title ?? 'Сделка #' . $deal->id }}</h5>
-                                                </a>
-                                                <p class="text-muted mb-2" style="font-size: 0.9rem;">
-                                                    Статус: <span class="badge bg-info">{{ $deal->status_text }}</span>
-                                                </p>
+                                        <a href="{{ route('show-deal', $deal) }}" class="text-decoration-none" style="color: inherit;">
+                                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                                    <div class="min-w-0">
+                                                        <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $deal->project->title ?? 'Сделка #' . $deal->id }}</h5>
+                                                        <p class="text-muted mb-2" style="font-size: 0.9rem;">
+                                                            Статус: <span class="badge bg-info">{{ $deal->status_text }}</span>
+                                                        </p>
+                                                    </div>
+                                                <small class="text-muted flex-shrink-0">{{ $deal->created_at->format('d.m.Y') }}</small>
                                             </div>
-                                            <small class="text-muted flex-shrink-0">{{ $deal->created_at->format('d.m.Y') }}</small>
-                                        </div>
+                                        </a>
                                     </div>
                                 @endforeach
                             </div>

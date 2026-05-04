@@ -104,7 +104,7 @@ class DealController extends Controller
         return $url;
     }
 
-    public function show(Request $request, Deal $deal)
+    public function show(Deal $deal)
     {
         $userId = (int) auth()->id();
         if ((int) $deal->client_id !== $userId && (int) $deal->contractor_id !== $userId) {
@@ -118,9 +118,10 @@ class DealController extends Controller
             'offer.user',
             'client',
             'contractor',
+            'latestContractVersion',
         ]);
 
-        $contractVersion = $deal->contractVersions()->orderByDesc('version')->first();
+        $contractVersion = $deal->latestContractVersion;
 
         return view('deals.show', compact('deal', 'contractVersion'));
     }
@@ -145,6 +146,30 @@ class DealController extends Controller
         $downloadName = 'dogovor-sdelka-'.$deal->id.'-v'.$version->version.'.docx';
 
         return Storage::disk('local')->download($relative, $downloadName);
+    }
+
+    public function sendContractToContractor(Deal $deal)
+    {
+        $userId = (int) auth()->id();
+        abort_unless((int) $deal->client_id === $userId, 403);
+
+        if ($deal->status !== Deal::STATUS_CONTRACT_REVIEW) {
+            return redirect()->route('show-deal', $deal)
+                ->with('error', 'Действие недоступно для текущего статуса сделки.');
+        }
+
+        $version = $deal->contractVersions()->orderByDesc('version')->first();
+        abort_if($version === null, 404);
+
+        if ($version->status !== 'draft') {
+            return redirect()->route('show-deal', $deal)
+                ->with('error', 'Отправка доступна только для черновика договора.');
+        }
+
+        $version->update(['sent_to_contractor_at' => now()]);
+
+        return redirect()->route('show-deal', $deal)
+            ->with('success', 'Договор отправлен исполнителю. Ему доступна эта же сделка и скачивание Word-документа.');
     }
 
     private function buildContractSnapshot(Deal $deal): array

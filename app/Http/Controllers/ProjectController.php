@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Offer;
 use App\Models\Project;
 use App\Models\Region;
@@ -11,22 +12,43 @@ class ProjectController extends Controller
 {
     public function index(Request $request)
     {
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+            'region_id' => 'nullable|exists:regions,id',
+            'city_id' => 'nullable|exists:cities,id',
+        ]);
+
         $query = Project::query()
             ->where('moderation_status', Project::MOD_PROJECT_APPROVED)
             ->whereNotNull('expires_at')
             ->where('expires_at', '>', now());
 
-        // Поиск
-        if ($request->has('search') && $request->search) {
-            $query->where(function ($q) use ($request) {
-                $q->where('title', 'like', '%'.$request->search.'%')
-                    ->orWhere('description', 'like', '%'.$request->search.'%');
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('description', 'like', '%'.$search.'%');
             });
         }
 
-        $projects = $query->latest()->paginate(12);
+        if ($request->filled('region_id')) {
+            $query->where('region_id', $request->region_id);
+        }
 
-        return view('projects.index', compact('projects'));
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        $projects = $query->latest()->paginate(12)->withQueryString();
+
+        $regions = Region::orderBy('name')->get();
+
+        $cities = collect();
+        if ($request->filled('region_id')) {
+            $cities = City::where('region_id', $request->region_id)->orderBy('name')->get();
+        }
+
+        return view('projects.index', compact('projects', 'regions', 'cities'));
     }
 
     public function create()

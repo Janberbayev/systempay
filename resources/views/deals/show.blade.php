@@ -12,6 +12,13 @@
                 <x-dashboard-sidebar />
 
                 <div class="col-lg-9 col-md-8">
+                    @if(session('success'))
+                        <div class="alert alert-success rounded-12 mb-3" role="alert">{{ session('success') }}</div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger rounded-12 mb-3" role="alert">{{ session('error') }}</div>
+                    @endif
+
                     <a href="{{ route('my-deal') }}" class="deal-show-back text-decoration-none d-inline-flex align-items-center gap-1 mb-3">
                         <i class="bi bi-arrow-left"></i> Мои сделки
                     </a>
@@ -113,15 +120,41 @@
                                 <p class="small mb-2" style="color: var(--text-secondary);">
                                     Версия {{ $contractVersion->version }} · черновик ·
                                     {{ $contractVersion->created_at->format('d.m.Y H:i') }}
+                                    @if($contractVersion->sent_to_contractor_at)
+                                        · <span class="text-success">исполнителю направлено {{ $contractVersion->sent_to_contractor_at->format('d.m.Y H:i') }}</span>
+                                    @endif
                                 </p>
                                 <p class="deal-show-note mb-3">
                                     Условия зафиксированы в системе. Контрольная сумма:
                                     <code class="user-select-all" style="font-size: 0.75rem;">{{ \Illuminate\Support\Str::limit($contractVersion->hash, 24, '…') }}</code>
                                 </p>
-                                <a href="{{ route('deals.contract-word', $deal) }}" class="btn btn-creative d-inline-flex align-items-center gap-2">
-                                    <i class="bi bi-file-earmark-word"></i>
-                                    Скачать договор в Word (.docx)
-                                </a>
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                                    @if((int) auth()->id() === (int) $deal->client_id)
+                                        <a href="{{ route('deals.contract-word', $deal) }}" class="btn btn-creative d-inline-flex align-items-center gap-2">
+                                            <i class="bi bi-file-earmark-word"></i>
+                                            Скачать договор в Word (.docx)
+                                        </a>
+                                        @if($deal->status === \App\Models\Deal::STATUS_CONTRACT_REVIEW && ($contractVersion->status ?? null) === 'draft')
+                                            <form action="{{ route('deals.send-contract-to-contractor', $deal) }}" method="post" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-creative-secondary d-inline-flex align-items-center gap-2">
+                                                    <i class="bi bi-send-fill"></i>
+                                                    Отправить договор Исполнителю
+                                                </button>
+                                            </form>
+                                        @endif
+                                    @elseif((int) auth()->id() === (int) $deal->contractor_id)
+                                        <a href="{{ route('deals.contract-word', $deal) }}" class="btn btn-creative d-inline-flex align-items-center gap-2">
+                                            <i class="bi bi-eye"></i>
+                                            Просмотр договора
+                                        </a>
+                                    @else
+                                        <a href="{{ route('deals.contract-word', $deal) }}" class="btn btn-creative d-inline-flex align-items-center gap-2">
+                                            <i class="bi bi-file-earmark-word"></i>
+                                            Скачать договор в Word (.docx)
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
                         @endif
                     </div>

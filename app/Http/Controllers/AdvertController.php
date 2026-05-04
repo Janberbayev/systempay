@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Advert;
+use App\Models\City;
 use App\Models\Region;
 use Illuminate\Http\Request;
 
@@ -10,28 +11,49 @@ class AdvertController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Advert::with('user')
+        $request->validate([
+            'search' => 'nullable|string|max:255',
+            'region_id' => 'nullable|exists:regions,id',
+            'city_id' => 'nullable|exists:cities,id',
+        ]);
+
+        $query = Advert::with('user', 'region', 'city')
             ->where('moderation_status', Advert::MOD_ADVERT_APPROVED)
             ->whereNotNull('expires_at')
             ->where('expires_at', '>', now());
 
-        // Поиск
-        if ($request->has('search') && $request->search) {
+        if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('content', 'like', "%{$search}%");
+                $q->where('title', 'like', '%'.$search.'%')
+                    ->orWhere('content', 'like', '%'.$search.'%');
             });
         }
 
-        $adverts = $query->latest()->paginate(12);
-        return view('adverts.index', compact('adverts'));
-    }
+        if ($request->filled('region_id')) {
+            $query->where('region_id', $request->region_id);
+        }
 
+        if ($request->filled('city_id')) {
+            $query->where('city_id', $request->city_id);
+        }
+
+        $adverts = $query->latest()->paginate(12)->withQueryString();
+
+        $regions = Region::orderBy('name')->get();
+
+        $cities = collect();
+        if ($request->filled('region_id')) {
+            $cities = City::where('region_id', $request->region_id)->orderBy('name')->get();
+        }
+
+        return view('adverts.index', compact('adverts', 'regions', 'cities'));
+    }
 
     public function create()
     {
         $regions = Region::orderBy('name')->get();
+
         return view('adverts.add-new-advert', compact('regions'));
     }
 
@@ -40,23 +62,23 @@ class AdvertController extends Controller
         // 1 вариант - Advert::create($request->all());
 
         // 2 вариант
-//        $data = $request->validate([
-////            'user_id' => 'exists:users,id',
-//            'title' => 'required|string|max:255',
-//            'content' => 'required|string',
-//        ]);
-//        $request->user()->adverts()->create($data);
+        //        $data = $request->validate([
+        // //            'user_id' => 'exists:users,id',
+        //            'title' => 'required|string|max:255',
+        //            'content' => 'required|string',
+        //        ]);
+        //        $request->user()->adverts()->create($data);
 
         // 3 вариант
-//        $request->user()->adverts()->create([
-//            'title' => $request->title,
-//            'content' => $request->content,
-//            'status' => 'pending',
-//        ]);
+        //        $request->user()->adverts()->create([
+        //            'title' => $request->title,
+        //            'content' => $request->content,
+        //            'status' => 'pending',
+        //        ]);
 
         // 4 вариант
         $request->validate([
-//            'user_id' => 'exists:users,id',
+            //            'user_id' => 'exists:users,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'region_id' => 'nullable|exists:regions,id',
@@ -72,6 +94,7 @@ class AdvertController extends Controller
             'region_id' => $request->region_id,
             'city_id' => $request->city_id,
         ]);
+
         return redirect()->back()->with('success', 'Объявление отправлено на модерацию.');
     }
 
@@ -80,7 +103,6 @@ class AdvertController extends Controller
         return view('adverts.show', compact('advert'));
     }
 
-
     public function edit(Advert $advert)
     {
         abort_if($advert->user_id !== auth()->id(), 403);
@@ -88,7 +110,6 @@ class AdvertController extends Controller
 
         return view('adverts.edit', compact('advert', 'regions'));
     }
-
 
     public function update(Request $request, Advert $advert)
     {

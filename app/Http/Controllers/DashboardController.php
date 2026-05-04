@@ -96,6 +96,7 @@ class DashboardController extends Controller
                     ->orWhere('contractor_id', $user->id);
             })
             ->with('project')
+            ->with(['latestContractVersion'])
             ->withCount('contractVersions')
             ->orderBy('created_at', 'desc')
             ->get();

@@ -55,11 +55,24 @@ class Deal extends Model
     public function getStatusTextAttribute()
     {
         if ($this->status === self::STATUS_CONTRACT_REVIEW) {
+            $latest = $this->relationLoaded('latestContractVersion')
+                ? $this->latestContractVersion
+                : $this->contractVersions()->orderByDesc('version')->first();
+            $sentAt = $latest?->sent_to_contractor_at;
+
             if (auth()->id() === $this->client_id) {
+                if ($sentAt) {
+                    return 'Договор отправлен исполнителю ('.$sentAt->format('d.m.Y H:i').')';
+                }
+
                 return 'Черновик договора сформирован, на согласовании';
             }
 
             if (auth()->id() === $this->contractor_id) {
+                if ($sentAt) {
+                    return 'Договор от заказчика: ожидает вашего ознакомления и согласования';
+                }
+
                 return 'Черновик договора от заказчика, требуется согласование';
             }
         }
@@ -78,6 +91,11 @@ class Deal extends Model
     public function contractVersions()
     {
         return $this->hasMany(ContractVersion::class);
+    }
+
+    public function latestContractVersion()
+    {
+        return $this->hasOne(ContractVersion::class)->latestOfMany('version');
     }
 
     public function items()

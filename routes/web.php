@@ -108,6 +108,7 @@ Route::middleware('auth')->group(function () {
 
     // *offer from user to project
     Route::get('show-deal/{deal}', [DealController::class, 'show'])->name('show-deal')->middleware('can:add deals');
+    Route::post('show-deal/{deal}/send-contract-to-contractor', [DealController::class, 'sendContractToContractor'])->name('deals.send-contract-to-contractor');
     Route::get('show-deal/{deal}/dogovor.docx', [DealController::class, 'downloadContractWord'])->name('deals.contract-word');
 
     // Deal
