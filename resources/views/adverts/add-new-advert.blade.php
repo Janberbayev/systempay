@@ -32,12 +32,11 @@
                             </div>
                             <div>
                                 <h4 class="fw-black mb-0">Исполнитель</h4>
-                                <small class="fw-bold">Для бизнеса и стартапов</small>
+                                <small class="fw-bold">Для мастеров, специалистов и команд</small>
                             </div>
                         </div>
                         <p class="mb-4">
-                            Размещайте задачи, выбирайте исполнителей по рейтингу и портфолио,
-                            контролируйте ход работ через этапы.
+                            Получайте доступ к качественным проектам, выстраивайте репутацию и защищайте свои интересы.
                         </p>
 
                         @if(auth()->user()->can('add ads'))
@@ -45,9 +44,9 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Область</label>
-                                    <select 
-                                        name="region_id" 
-                                        id="region_id" 
+                                    <select
+                                        name="region_id"
+                                        id="region_id"
                                         class="form-control form-control-lg"
                                         style="border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary);"
                                     >
@@ -62,9 +61,9 @@
 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Город</label>
-                                    <select 
-                                        name="city_id" 
-                                        id="city_id" 
+                                    <select
+                                        name="city_id"
+                                        id="city_id"
                                         class="form-control form-control-lg"
                                         style="border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary);"
                                         disabled
@@ -75,10 +74,10 @@
 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Название объявления</label>
-                                    <input 
-                                        type="text" 
-                                        class="form-control form-control-lg" 
-                                        name="title" 
+                                    <input
+                                        type="text"
+                                        class="form-control form-control-lg"
+                                        name="title"
                                         value="{{ old('title') }}"
                                         placeholder="Введите название объявления"
                                         required
@@ -87,9 +86,9 @@
 
                                 <div class="mb-3">
                                     <label class="form-label fw-bold">Описание</label>
-                                    <textarea 
-                                        rows="5" 
-                                        class="form-control form-control-lg" 
+                                    <textarea
+                                        rows="5"
+                                        class="form-control form-control-lg"
                                         name="content"
                                         placeholder="Опишите ваше объявление..."
                                         required
@@ -143,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     citySelect.appendChild(option);
                 });
                 citySelect.disabled = false;
-                
+
                 // Восстанавливаем выбранный город при ошибках валидации
                 const oldCityId = @json(old('city_id'));
                 if (oldCityId) {

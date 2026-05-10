@@ -160,7 +160,7 @@
                             </div>
                             <div>
                                 <h4 class="fw-black mb-0">Исполнитель</h4>
-                                <small class="fw-bold">Для фрилансеров и команд</small>
+                                <small class="fw-bold">Для мастеров, специалистов и команд</small>
                             </div>
                         </div>
                         <p class="mb-4">
