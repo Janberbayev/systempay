@@ -51,8 +51,6 @@
                                         value="{{ request('search') }}"
                                         placeholder="По названию или описанию..."
                                         style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
-                                        onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
-                                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
                                     >
                                 </div>
                                 <div class="col-md-3">
@@ -64,8 +62,6 @@
                                         id="filter_region_list"
                                         name="region_id"
                                         style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
-                                        onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
-                                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
                                         onchange="document.getElementById('filter_city_list').value=''; this.form.submit();"
                                     >
                                         <option value="">Все области</option>
@@ -86,8 +82,6 @@
                                         name="city_id"
                                         style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
                                         {{ !request('region_id') ? 'disabled' : '' }}
-                                        onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
-                                        onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
                                     >
                                         <option value="">Все города</option>
                                         @if(request('region_id'))
@@ -191,6 +185,20 @@
     </section>
 
     <style>
+        #projectListFilters .form-control:focus,
+        #projectListFilters .form-control:focus-visible,
+        #projectListFilters .form-select:focus,
+        #projectListFilters .form-select:focus-visible {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1) !important;
+            outline: none !important;
+        }
+
+        #projectListFilters .form-select:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+
         .project-card-title {
             display: -webkit-box;
             -webkit-line-clamp: 2;

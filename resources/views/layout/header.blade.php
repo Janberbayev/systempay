@@ -23,11 +23,13 @@
             --accent-green-hover: #0d8c6f;
             --accent-blue: #3b82f6;
             --accent-purple: #8b5cf6;
+            --primary: var(--accent-green);
             --shadow: rgba(0, 0, 0, 0.3);
         }
         
         .light-theme {
             /* ChatGPT light theme */
+            --primary: var(--accent-green);
             --bg-dark: #ffffff;
             --bg-darker: #f7f7f8;
             --bg-card: #ffffff;
@@ -97,7 +99,10 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         }
         
-        .light-theme .form-control:focus {
+        .light-theme .form-control:focus,
+        .light-theme .form-control:focus-visible,
+        .light-theme .form-select:focus,
+        .light-theme .form-select:focus-visible {
             background: var(--bg-card);
         }
         
@@ -430,11 +435,29 @@
             border-radius: 12px;
         }
 
-        .form-control:focus {
+        .form-control:focus,
+        .form-control:focus-visible {
             background: var(--bg-card-hover);
             border-color: var(--accent-green);
             color: var(--text-primary);
             box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+            outline: none;
+        }
+
+        .form-select {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            border-radius: 12px;
+        }
+
+        .form-select:focus,
+        .form-select:focus-visible {
+            background-color: var(--bg-card-hover);
+            border-color: var(--accent-green);
+            color: var(--text-primary);
+            box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+            outline: none;
         }
 
         .form-control::placeholder {

@@ -88,6 +88,24 @@ class Deal extends Model
         return 'Неизвестный статус';
     }
 
+    /** Договор отправлен заказчиком и ждёт ознакомления исполнителя (статус в списке «Мои сделки»). */
+    public function isContractAwaitingContractorReview(): bool
+    {
+        if ($this->status !== self::STATUS_CONTRACT_REVIEW) {
+            return false;
+        }
+
+        if (auth()->id() !== $this->contractor_id) {
+            return false;
+        }
+
+        $latest = $this->relationLoaded('latestContractVersion')
+            ? $this->latestContractVersion
+            : $this->contractVersions()->orderByDesc('version')->first();
+
+        return (bool) $latest?->sent_to_contractor_at;
+    }
+
     public function contractVersions()
     {
         return $this->hasMany(ContractVersion::class);

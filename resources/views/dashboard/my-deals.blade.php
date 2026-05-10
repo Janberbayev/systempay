@@ -24,7 +24,12 @@
                                                     <div class="min-w-0">
                                                         <h5 class="fw-bold mb-2" style="color: var(--text-primary);">{{ $deal->project->title ?? 'Сделка #' . $deal->id }}</h5>
                                                         <p class="text-muted mb-2" style="font-size: 0.9rem;">
-                                                            Статус: <span class="badge bg-info">{{ $deal->status_text }}</span>
+                                                            Статус:
+                                                            @if($deal->isContractAwaitingContractorReview())
+                                                                <span class="badge border-0" style="background: var(--accent-purple); color: #fff;">{{ $deal->status_text }}</span>
+                                                            @else
+                                                                <span class="badge bg-info">{{ $deal->status_text }}</span>
+                                                            @endif
                                                         </p>
                                                     </div>
                                                 <small class="text-muted flex-shrink-0">{{ $deal->created_at->format('d.m.Y') }}</small>
