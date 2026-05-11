@@ -17,6 +17,7 @@ return new class extends Migration
 
             $table->string('title');
             $table->text('content');
+            $table->text('external_links')->nullable();
 
 //            $table->enum('status', ['pending', 'approved', 'rejected', 'revision']);
             $table->string('moderation_status', 20)->default('pending');
