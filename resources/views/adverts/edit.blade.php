@@ -94,6 +94,18 @@
                                         required
                                     >{{ old('content', $advert->content) }}</textarea>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Ссылки (сайт, портфолио, соцсети)</label>
+                                    <textarea
+                                        rows="3"
+                                        class="form-control form-control-lg"
+                                        name="external_links"
+                                        placeholder="Например: сайт, Instagram, примеры работ — по одной ссылке в строке или через запятую"
+                                    >{{ old('external_links', $advert->external_links) }}</textarea>
+                                    <small class="text-muted">Необязательное поле</small>
+                                </div>
+
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-creative w-100 w-md-auto">
                                         <i class="bi bi-plus-circle me-2"></i>Сохранить и отправить модератору

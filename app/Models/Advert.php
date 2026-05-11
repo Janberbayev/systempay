@@ -13,6 +13,7 @@ class Advert extends Model
         'user_id',
         'title',
         'content',
+        'external_links',
 //        'is_approved',
         'moderation_status',
         'expires_at',

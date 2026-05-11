@@ -95,6 +95,17 @@
                                     >{{ old('content') }}</textarea>
                                 </div>
 
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">Ссылки (сайт, портфолио, соцсети)</label>
+                                    <small class="text-muted">необязательное поле</small>
+                                    <textarea
+                                        rows="3"
+                                        class="form-control form-control-lg"
+                                        name="external_links"
+                                        placeholder="Например: сайт, Instagram и т.д."
+                                    >{{ old('external_links') }}</textarea>
+                                </div>
+
                                 <button type="submit" class="btn btn-creative w-100">
                                     <i class="bi bi-plus-circle me-2"></i>Создать объявление
                                 </button>

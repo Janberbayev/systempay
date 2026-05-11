@@ -26,7 +26,8 @@ class AdvertController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', '%'.$search.'%')
-                    ->orWhere('content', 'like', '%'.$search.'%');
+                    ->orWhere('content', 'like', '%'.$search.'%')
+                    ->orWhere('external_links', 'like', '%'.$search.'%');
             });
         }
 
@@ -81,6 +82,7 @@ class AdvertController extends Controller
             //            'user_id' => 'exists:users,id',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'external_links' => 'nullable|string|max:5000',
             'region_id' => 'nullable|exists:regions,id',
             'city_id' => 'nullable|exists:cities,id',
         ]);
@@ -89,6 +91,7 @@ class AdvertController extends Controller
             'user_id' => auth()->id(),
             'title' => $request->title,
             'content' => $request->content,
+            'external_links' => $request->external_links,
             'moderation_status' => Advert::MOD_ADVERT_PENDING,
             'expires_at' => now()->addDays(10),
             'region_id' => $request->region_id,
@@ -115,9 +118,18 @@ class AdvertController extends Controller
     {
         abort_if($advert->user_id !== auth()->id(), 403);
 
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'external_links' => 'nullable|string|max:5000',
+            'region_id' => 'nullable|exists:regions,id',
+            'city_id' => 'nullable|exists:cities,id',
+        ]);
+
         $advert->update([
             'title' => $request->title,
             'content' => $request->content,
+            'external_links' => $request->external_links,
             'moderation_status' => Advert::MOD_ADVERT_PENDING,
             'admin_comment' => null,
             'expires_at' => now()->addDays(10),

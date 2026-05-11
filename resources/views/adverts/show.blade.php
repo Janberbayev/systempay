@@ -80,6 +80,13 @@
                             </p>
                         </div>
 
+                        @if(filled($advert->external_links))
+                            <div class="mt-4">
+                                <h5 class="mb-2" style="color: var(--text-primary);">Ссылки</h5>
+                                <p style="color: var(--text-secondary); line-height: 1.8; white-space: pre-wrap;">{{ $advert->external_links }}</p>
+                            </div>
+                        @endif
+
                         <div class="d-flex justify-content-end align-items-center flex-wrap gap-3 mt-5">
                             @if(auth()->check() && $advert->user_id === auth()->id())
                                 <a href="{{ route('edit-ads', $advert) }}" class="btn btn-creative">
