@@ -159,8 +159,8 @@
                     <a href="{{ route('show-ads', $advert) }}?{{ http_build_query(['from' => 'list']) }}" class="advert-card-link text-decoration-none d-flex flex-grow-1 w-100" style="color: inherit; min-width: 0;">
                     <div class="card-creative p-4 w-100 d-flex flex-column">
                         <div class="mb-3">
-                            <h5 class="fw-bold advert-card-title advert-card-user-name mb-0" title="{{ $advert->user?->name }}">
-                                {{ $advert->user?->name ?? '—' }}
+                            <h5 class="fw-bold advert-card-title advert-card-user-name mb-0" title="{{ $advert->user?->first_name }}">
+                                {{ $advert->user?->first_name ?? '—' }}
                             </h5>
                             @if($advert->category)
                                 <span class="badge rounded-pill mt-2" style="background: rgba(4, 120, 87, 0.15); color: var(--primary); font-size: 0.75rem; font-weight: 600;">
