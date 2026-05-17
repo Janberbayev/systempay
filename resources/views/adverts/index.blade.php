@@ -44,7 +44,34 @@
                         @endif
 
                         <div class="row g-2 mb-2">
-                            <div class="col-md-5">
+                            <div class="col-md-3">
+                                <label for="filter_category_ads" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
+                                    <i class="bi bi-grid me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Категория
+                                </label>
+                                <select
+                                    class="form-select form-select-sm"
+                                    id="filter_category_ads"
+                                    name="category_id"
+                                    style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
+                                    onfocus="this.style.borderColor='var(--primary)'; this.style.boxShadow='0 0 0 0.15rem rgba(4, 120, 87, 0.1)'"
+                                    onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none'"
+                                >
+                                    <option value="">Все категории</option>
+                                    @foreach($categoryRoots as $root)
+                                        <optgroup label="{{ $root->name }}">
+                                            <option value="{{ $root->id }}" {{ (string) request('category_id') === (string) $root->id ? 'selected' : '' }}>
+                                                Вся группа «{{ $root->name }}»
+                                            </option>
+                                            @foreach($root->children as $child)
+                                                <option value="{{ $child->id }}" {{ (string) request('category_id') === (string) $child->id ? 'selected' : '' }}>
+                                                    {{ $child->name }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="search_ads" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
                                     <i class="bi bi-search me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Поиск
                                 </label>
@@ -81,7 +108,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <label for="filter_city_ads" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
                                     <i class="bi bi-geo me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Город
                                 </label>
@@ -128,18 +155,23 @@
         <!-- Adverts Grid -->
         <div class="row g-4">
             @forelse($adverts as $advert)
-                <div class="col-md-6 col-lg-4">
-                    <a href="{{ route('show-ads', $advert) }}?{{ http_build_query(['from' => 'list']) }}" style="text-decoration: none;">
-                    <div class="card-creative p-4 h-100">
+                <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
+                    <a href="{{ route('show-ads', $advert) }}?{{ http_build_query(['from' => 'list']) }}" class="advert-card-link text-decoration-none d-flex flex-grow-1 w-100" style="color: inherit; min-width: 0;">
+                    <div class="card-creative p-4 w-100 d-flex flex-column">
                         <div class="mb-3">
-                            <h5 class="fw-bold advert-card-title" style="color: var(--text-primary);" title="{{ $advert->title }}">
-                                {{ Str::limit($advert->title, 72) }}
+                            <h5 class="fw-bold advert-card-title advert-card-user-name mb-0" title="{{ $advert->user?->name }}">
+                                {{ $advert->user?->name ?? '—' }}
                             </h5>
+                            @if($advert->category)
+                                <span class="badge rounded-pill mt-2" style="background: rgba(4, 120, 87, 0.15); color: var(--primary); font-size: 0.75rem; font-weight: 600;">
+                                    {{ $advert->category->name }}
+                                </span>
+                            @endif
                         </div>
-                        <p class="mb-3 advert-card-desc" style="color: var(--text-secondary); line-height: 1.6;">
+                        <p class="mb-3 advert-card-desc flex-grow-1" style="color: var(--text-secondary); line-height: 1.6;">
                             {{ Str::limit(strip_tags($advert->content), 140) }}
                         </p>
-                        <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
                             <small class="text-muted" style="color: var(--text-muted);">
                                 <i class="bi bi-calendar me-1"></i>
                                 {{ $advert->created_at->format('d.m.Y') }}
@@ -159,13 +191,13 @@
                         </div>
                         <h3 class="fw-bold mb-3" style="color: var(--text-primary);">Объявлений не найдено</h3>
                         <p class="mb-4" style="color: var(--text-secondary);">
-                            @if(request()->hasAny(['search', 'region_id', 'city_id']))
+                            @if(request()->hasAny(['search', 'region_id', 'city_id', 'category_id']))
                                 Нет объявлений по выбранным фильтрам
                             @else
                                 Пока нет объявлений. Создайте первое объявление!
                             @endif
                         </p>
-                        @if(request()->hasAny(['search', 'region_id', 'city_id']))
+                        @if(request()->hasAny(['search', 'region_id', 'city_id', 'category_id']))
                             <a href="{{ route('list-ads') }}" class="btn btn-outline-secondary me-2 rounded-3">
                                 Сбросить фильтры
                             </a>
@@ -194,6 +226,17 @@
 </section>
 
 <style>
+    .advert-card-user-name {
+        color: var(--text-primary);
+        transition: color 0.2s ease;
+    }
+    .advert-card-link:hover .advert-card-user-name {
+        color: var(--accent-blue);
+    }
+    .light-theme .advert-card-link:hover .advert-card-user-name {
+        color: #2563eb;
+    }
+
     .advert-card-title {
         display: -webkit-box;
         -webkit-line-clamp: 2;

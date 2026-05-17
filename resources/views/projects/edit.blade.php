@@ -73,6 +73,29 @@
                                 </div>
 
                                 <div class="mb-3">
+                                    <label class="form-label fw-bold">Категория</label>
+                                    <select
+                                        name="category_id"
+                                        class="form-control form-control-lg"
+                                        style="border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary);"
+                                    >
+                                        <option value="">Выберите категорию</option>
+                                        @foreach($categoryRoots as $root)
+                                            <optgroup label="{{ $root->name }}">
+                                                <option value="{{ $root->id }}" {{ (string) old('category_id', $project->category_id) === (string) $root->id ? 'selected' : '' }}>
+                                                    Вся группа «{{ $root->name }}»
+                                                </option>
+                                                @foreach($root->children as $child)
+                                                    <option value="{{ $child->id }}" {{ (string) old('category_id', $project->category_id) === (string) $child->id ? 'selected' : '' }}>
+                                                        {{ $child->name }}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
                                     <label class="form-label fw-bold">Название проекта</label>
                                     <input
                                         type="text"
@@ -92,7 +115,7 @@
                                         name="description"
                                         placeholder="Опишите ваше объявление..."
                                         required
-                                    >{{ old('content', $project->description) }}</textarea>
+                                    >{{ old('description', $project->description) }}</textarea>
                                 </div>
                                 <div class="mt-4">
                                     <button type="submit" class="btn btn-creative w-100 w-md-auto">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\City;
 use App\Models\Offer;
 use App\Models\Project;
@@ -16,12 +17,32 @@ class ProjectController extends Controller
             'search' => 'nullable|string|max:255',
             'region_id' => 'nullable|exists:regions,id',
             'city_id' => 'nullable|exists:cities,id',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $query = Project::query()
+            ->with('category')
             ->where('moderation_status', Project::MOD_PROJECT_APPROVED)
             ->whereNotNull('expires_at')
             ->where('expires_at', '>', now());
+
+        if ($request->filled('category_id')) {
+            $category = Category::query()
+                ->where('id', $request->category_id)
+                ->where('is_active', true)
+                ->first();
+            if ($category) {
+                $categoryIds = [$category->id];
+                $childIds = $category->children()
+                    ->where('is_active', true)
+                    ->pluck('id')
+                    ->all();
+                if ($childIds !== []) {
+                    $categoryIds = array_merge($categoryIds, $childIds);
+                }
+                $query->whereIn('category_id', $categoryIds);
+            }
+        }
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -48,14 +69,30 @@ class ProjectController extends Controller
             $cities = City::where('region_id', $request->region_id)->orderBy('name')->get();
         }
 
-        return view('projects.index', compact('projects', 'regions', 'cities'));
+        $categoryRoots = $this->categoryRoots();
+
+        return view('projects.index', compact('projects', 'regions', 'cities', 'categoryRoots'));
+    }
+
+    protected function categoryRoots(): \Illuminate\Database\Eloquent\Collection
+    {
+        return Category::query()
+            ->where('is_active', true)
+            ->whereNull('parent_id')
+            ->orderBy('sort_order')
+            ->orderBy('name')
+            ->with([
+                'children' => fn ($q) => $q->where('is_active', true)->orderBy('sort_order')->orderBy('name'),
+            ])
+            ->get();
     }
 
     public function create()
     {
         $regions = Region::orderBy('name')->get();
+        $categoryRoots = $this->categoryRoots();
 
-        return view('projects.add-new-project', compact('regions'));
+        return view('projects.add-new-project', compact('regions', 'categoryRoots'));
     }
 
     public function store(Request $request)
@@ -77,6 +114,7 @@ class ProjectController extends Controller
             'description' => 'required|string',
             'region_id' => 'nullable|exists:regions,id',
             'city_id' => 'nullable|exists:cities,id',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         Project::create([
@@ -87,6 +125,7 @@ class ProjectController extends Controller
             'expires_at' => now()->addDays(10),
             'region_id' => $request->region_id,
             'city_id' => $request->city_id,
+            'category_id' => $request->category_id,
         ]);
 
         return redirect()->back()->with('success', 'Ваш Проект отправлен на модерацию!');
@@ -115,13 +154,22 @@ class ProjectController extends Controller
     {
         abort_if($project->user_id !== auth()->id(), 403);
         $regions = Region::all();
+        $categoryRoots = $this->categoryRoots();
 
-        return view('projects.edit', compact('project', 'regions'));
+        return view('projects.edit', compact('project', 'regions', 'categoryRoots'));
     }
 
     public function update(Request $request, Project $project)
     {
         abort_if($project->user_id !== auth()->id(), 403);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'region_id' => 'nullable|exists:regions,id',
+            'city_id' => 'nullable|exists:cities,id',
+            'category_id' => 'nullable|exists:categories,id',
+        ]);
 
         $project->update([
             'title' => $request->title,
@@ -131,6 +179,7 @@ class ProjectController extends Controller
             'expires_at' => now()->addDays(10),
             'region_id' => $request->region_id,
             'city_id' => $request->city_id,
+            'category_id' => $request->category_id,
         ]);
 
         return back()->with('success', 'Исправлено и отправлено на повторную проверку');

@@ -40,7 +40,7 @@
                                     Кабинет
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    @if(Auth::user()->name == 'Admin')
+                                    @if(Auth::user()->hasRole('admin'))
                                         <li>
                                             <a class="dropdown-item" href="{{ route('admin.page') }}">Админка</a>
                                         </li>

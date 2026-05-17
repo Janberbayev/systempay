@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             PermissionsSeeder::class,
             UserSeeder::class,
             RegionCitySeeder::class,
+            CategorySeeder::class,
         ]);
     }
 }

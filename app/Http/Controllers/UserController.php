@@ -60,12 +60,14 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'role_id' => 'required|integer|exists:roles,id',
         ]);
 
         $user->update([
-            'name' => $request->name
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
         ]);
         $role = Role::find($request->role_id);
         $user->syncRoles([$role->name]);

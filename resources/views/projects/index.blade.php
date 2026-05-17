@@ -39,7 +39,32 @@
                             @endif
 
                             <div class="row g-2 mb-2">
-                                <div class="col-md-5">
+                                <div class="col-md-3">
+                                    <label for="filter_category_project" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
+                                        <i class="bi bi-grid me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Категория
+                                    </label>
+                                    <select
+                                        class="form-select form-select-sm"
+                                        id="filter_category_project"
+                                        name="category_id"
+                                        style="border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); padding: 6px 12px; font-size: 0.875rem; transition: all 0.2s ease;"
+                                    >
+                                        <option value="">Все категории</option>
+                                        @foreach($categoryRoots as $root)
+                                            <optgroup label="{{ $root->name }}">
+                                                <option value="{{ $root->id }}" {{ (string) request('category_id') === (string) $root->id ? 'selected' : '' }}>
+                                                    Вся группа «{{ $root->name }}»
+                                                </option>
+                                                @foreach($root->children as $child)
+                                                    <option value="{{ $child->id }}" {{ (string) request('category_id') === (string) $child->id ? 'selected' : '' }}>
+                                                        {{ $child->name }}
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
                                     <label for="search_list" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
                                         <i class="bi bi-search me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Поиск
                                     </label>
@@ -72,7 +97,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-2">
                                     <label for="filter_city_list" class="form-label fw-semibold mb-1 small" style="color: var(--text-primary); font-size: 0.875rem;">
                                         <i class="bi bi-geo me-1" style="color: var(--primary); font-size: 0.875rem;"></i>Город
                                     </label>
@@ -150,13 +175,13 @@
                             </div>
                             <h3 class="fw-bold mb-3" style="color: var(--text-primary);">Проект не найден</h3>
                             <p class="mb-4" style="color: var(--text-secondary);">
-                                @if(request()->hasAny(['search', 'region_id', 'city_id']))
+                                @if(request()->hasAny(['search', 'region_id', 'city_id', 'category_id']))
                                     Нет проектов по выбранным фильтрам
                                 @else
                                     Пока нет проекта. Создайте первый проект!
                                 @endif
                             </p>
-                            @if(request()->hasAny(['search', 'region_id', 'city_id']))
+                            @if(request()->hasAny(['search', 'region_id', 'city_id', 'category_id']))
                                 <a href="{{ route('list-project') }}" class="btn btn-outline-secondary me-2 rounded-3">
                                     Сбросить фильтры
                                 </a>

@@ -21,7 +21,8 @@ class UserSeeder extends Seeder
                 'phone' => '+77021105742'
             ],
             [
-                'name' => 'Admin',
+                'first_name' => 'Admin',
+                'last_name' => '',
                 'password' => Hash::make('password1'),
             ]
         );
@@ -35,7 +36,8 @@ class UserSeeder extends Seeder
                 'phone' => '+77014872126'
             ],
             [
-                'name' => 'User',
+                'first_name' => 'User',
+                'last_name' => '',
                 'password' => Hash::make('password2'),
             ]
         );

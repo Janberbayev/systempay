@@ -38,16 +38,26 @@
                         <form method="POST" action="{{ route('register') }}">
                             @csrf
                             <div class="mb-3">
-                                <label class="form-label fw-bold">ФИО</label>
-                                <input type="text" name="name" class="form-control rounded-3" placeholder="ФИО">
+                                <label class="form-label fw-bold">Имя</label>
+                                <input type="text" name="first_name" class="form-control rounded-3" placeholder="Имя" value="{{ old('first_name') }}" required autocomplete="given-name">
+                                @error('first_name')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Фамилия</label>
+                                <input type="text" name="last_name" class="form-control rounded-3" placeholder="Фамилия" value="{{ old('last_name') }}" required autocomplete="family-name">
+                                @error('last_name')
+                                    <div class="text-danger small mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Электронная почта</label>
-                                <input type="email" name="email" class="form-control rounded-3" placeholder="you@example.com">
+                                <input type="email" name="email" class="form-control rounded-3" placeholder="you@example.com" value="{{ old('email') }}" required>
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Номер телефона</label>
-                                <input type="text" name="phone" class="form-control rounded-3" placeholder="+7__________">
+                                <input type="text" name="phone" class="form-control rounded-3" placeholder="+7__________" value="{{ old('phone') }}" required autocomplete="tel">
                             </div>
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Пароль</label>

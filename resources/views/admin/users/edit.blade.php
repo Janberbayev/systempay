@@ -72,25 +72,41 @@
                         @csrf
                         @method('PUT')
 
-                        <!-- User Name -->
+                        <!-- User name -->
                         <div class="mb-4">
-                            <label for="name" class="form-label fw-bold mb-3" style="font-size: 1.1rem;">
+                            <label for="first_name" class="form-label fw-bold mb-3" style="font-size: 1.1rem;">
                                 <i class="bi bi-person me-2" style="color: var(--primary);"></i>
-                                Имя пользователя
+                                Имя
                             </label>
                             <input
                                 type="text"
                                 class="form-control form-control-lg"
-                                id="name"
-                                name="name"
-                                placeholder="Введите имя пользователя"
+                                id="first_name"
+                                name="first_name"
+                                placeholder="Имя"
                                 style="border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; font-weight: 500;"
-                                value="{{ old('name', $user->name) }}"
+                                value="{{ old('first_name', $user->first_name) }}"
+                                required
+                            >
+                        </div>
+                        <div class="mb-4">
+                            <label for="last_name" class="form-label fw-bold mb-3" style="font-size: 1.1rem;">
+                                <i class="bi bi-person me-2" style="color: var(--primary);"></i>
+                                Фамилия
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control form-control-lg"
+                                id="last_name"
+                                name="last_name"
+                                placeholder="Фамилия"
+                                style="border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 16px; font-weight: 500;"
+                                value="{{ old('last_name', $user->last_name) }}"
                                 required
                             >
                             <small class="form-text text-muted mt-2">
                                 <i class="bi bi-info-circle me-1"></i>
-                                Введите полное имя пользователя
+                                Имя и фамилия отображаются в объявлениях и сделках
                             </small>
                         </div>
 

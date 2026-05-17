@@ -19,6 +19,7 @@ class Project extends Model
         'admin_comment',
         'region_id',
         'city_id',
+        'category_id',
     ];
 
     protected $casts = [
@@ -67,6 +68,11 @@ class Project extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     // Computed publication status

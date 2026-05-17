@@ -17,19 +17,36 @@
     @method('patch')
 
     <div class="mb-4">
-        <label for="name" class="form-label fw-bold">{{ __('Name') }}</label>
-        <input 
-            type="text" 
-            class="form-control form-control-lg" 
-            id="name" 
-            name="name" 
-            value="{{ old('name', $user->name) }}" 
-            required 
-            autofocus 
-            autocomplete="name"
+        <label for="first_name" class="form-label fw-bold">Имя</label>
+        <input
+            type="text"
+            class="form-control form-control-lg"
+            id="first_name"
+            name="first_name"
+            value="{{ old('first_name', $user->first_name) }}"
+            required
+            autofocus
+            autocomplete="given-name"
             style="border-width: 3px; border-color: #2d3436; border-radius: 12px;"
         >
-        @error('name')
+        @error('first_name')
+            <div class="text-danger mt-2 fw-bold">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="mb-4">
+        <label for="last_name" class="form-label fw-bold">Фамилия</label>
+        <input
+            type="text"
+            class="form-control form-control-lg"
+            id="last_name"
+            name="last_name"
+            value="{{ old('last_name', $user->last_name) }}"
+            required
+            autocomplete="family-name"
+            style="border-width: 3px; border-color: #2d3436; border-radius: 12px;"
+        >
+        @error('last_name')
             <div class="text-danger mt-2 fw-bold">{{ $message }}</div>
         @enderror
     </div>

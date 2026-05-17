@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Concerns\HasPublicationRemainingDays;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Advert extends Model
 {
@@ -11,6 +12,7 @@ class Advert extends Model
 
     protected $fillable = [
         'user_id',
+        'slug',
         'title',
         'content',
         'external_links',
@@ -20,6 +22,7 @@ class Advert extends Model
         'admin_comment',
         'region_id',
         'city_id',
+        'category_id',
         ];
 
     protected $casts = [
@@ -39,6 +42,31 @@ class Advert extends Model
             self::MOD_ADVERT_REJECTED,
             self::MOD_ADVERT_REVISION,
         ];
+    }
+
+    /**
+     * Уникальный slug из заголовка (для NOT NULL + unique в БД).
+     */
+    public static function uniqueSlugFromTitle(string $title, ?int $ignoreAdvertId = null): string
+    {
+        $base = Str::slug($title, '-', 'ru');
+        if ($base === '') {
+            $base = 'obyavlenie';
+        }
+
+        $slug = $base;
+        $suffix = 0;
+
+        while (static::query()
+            ->when($ignoreAdvertId !== null, fn ($q) => $q->where('id', '!=', $ignoreAdvertId))
+            ->where('slug', $slug)
+            ->exists()
+        ) {
+            $suffix++;
+            $slug = $base.'-'.$suffix;
+        }
+
+        return $slug;
     }
 
     public function user()
@@ -65,6 +93,11 @@ class Advert extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     // Computed publication status
